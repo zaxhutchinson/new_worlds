@@ -1,0 +1,55 @@
+{
+    "bridge" : {
+        "name" : "Bridge",
+        "type" : "Bridge",
+        "structural_health": 100,
+        "system_health": 100,
+        "energy_req": 10,
+        "room_location": [0,0,0],
+        "room_shape": [1,1],
+        "num_teams": 1,
+        "team_type": "Command"
+    },
+    "cargohold" : {
+        
+    },
+    "ftl_engine" : {
+
+    },
+    "hangar" : {
+
+    },
+    "hull" : {
+
+    },
+    "medbay" : {
+
+    },
+    "quarters" : {
+
+    },
+    "reactor" : {
+
+    },
+    "repair_station" : {
+
+    },
+    "scanner" : {
+
+    },
+    "sec_station" : {
+
+    },
+    "shield": {
+
+    },
+    "stl_engine": {
+
+    },
+    "troophold" : {
+
+    },
+    "weapon" : {
+
+    }
+}
