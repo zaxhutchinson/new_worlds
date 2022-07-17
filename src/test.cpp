@@ -3,13 +3,42 @@
 
 namespace test {
 
+    void Output(str msg, bool expected, bool actual) {
+        if(expected==actual) {
+            fmt::print(fg(fmt::color::green), msg+" {} == {}\n", expected, actual);
+        } else {
+            fmt::print(fg(fmt::color::red), msg+" {} != {}\n", expected, actual);
+        }
+    }
+    void Output(str msg, int expected, int actual) {
+        if(expected==actual) {
+            fmt::print(fg(fmt::color::green), msg+" {} == {}\n", expected, actual);
+        } else {
+            fmt::print(fg(fmt::color::red), msg+" {} != {}\n", expected, actual);
+        }
+    }
+    void Output(str msg, double expected, double actual) {
+        if(expected==actual) {
+            fmt::print(fg(fmt::color::green), msg+" {} == {}\n", expected, actual);
+        } else {
+            fmt::print(fg(fmt::color::red), msg+" {} != {}\n", expected, actual);
+        }
+    }
+    void Output(str msg, float expected, float actual) {
+        if(expected==actual) {
+            fmt::print(fg(fmt::color::green), msg+" {} == {}\n", expected, actual);
+        } else {
+            fmt::print(fg(fmt::color::red), msg+" {} != {}\n", expected, actual);
+        }
+    }
+
     void TestShipSysDictLoading() {
 
         bool sys_good = shipfactory::LoadShipSysDict("default","ship_sys.json");
         bool ship_good = shipfactory::LoadShipDict("default","ship_sys.json");
 
-        std::cout << "TestShipSysDictLoading: ShipSys " << sys_good << std::endl;
-        std::cout << "TestShipSysDictLoading: Ship    " << ship_good << std::endl;
+        Output("TestShipSysDictLoading: ShipSys",true,sys_good);
+        Output("TestShipSysDictLoading: Ship",true,ship_good);
 
     }
 
