@@ -50,7 +50,6 @@ namespace shipfactory {
             it++
         ) {
             if(it.value().is_object()) {
-
                 // TODO: check object conforms to ship.
                 ship_dict.emplace(it.key(), it.value());
             } else {
@@ -78,22 +77,32 @@ namespace shipfactory {
         Vec2i room_shape(d[0],d[1]);
         
         str name = sys_obj.at("name");
-        SSysType type = sys_obj.at("type");
+        str sys_type_str = sys_obj.at("type");
         i64 structural_health = sys_obj.at("structural_health");
         i64 system_health = sys_obj.at("system_health");
         i64 energy_req = sys_obj.at("energy_req");
-
         i64 num_crew = sys_obj.at("num_crew");
-        SJobType job_type = sys_obj.at("job_type");
+        str job_type_str = sys_obj.at("job_type");
+
+        opt<SSysType> sys_type = magic_enum::enum_cast<SSysType>(sys_type_str);
+        opt<SJobType> job_type = magic_enum::enum_cast<SJobType>(job_type_str);
+
+        if(!sys_type.has_value()) {
+            fmt::print("InitBasicSysData: Bad SSysType {}\n", sys_type_str);
+            return;
+        } else if(!job_type.has_value()) {
+            fmt::print("InitBasicSysData: Bad JobType {}\n", job_type_str);
+            return ;
+        }
 
         sys->Init_SSys(
             name,
-            type,
+            sys_type.value(),
             structural_health,
             system_health,
             energy_req,
             num_crew,
-            job_type
+            job_type.value()
         );
 
         sys->SetRoomLocation(room_location);
@@ -373,7 +382,7 @@ namespace shipfactory {
 
         return sys;
     }
-    uptr<SSys> BuildSys(json obj) {
+    uptr<SSys> BuildSSys(json obj) {
         if(!obj.contains("uname")) return nullptr;
         str uname = obj.at("uname");
 
@@ -384,7 +393,10 @@ namespace shipfactory {
         str type_str = sys_obj.at("type");
         opt<SSysType> type = magic_enum::enum_cast<SSysType>(type_str);
 
-        if(!type.has_value()) return nullptr;
+        if(!type.has_value()) {
+            fmt::print("BuildSSys: Bad type {}\n", type_str);
+            return nullptr;
+        }
 
         switch(type.value()) {
             case SSysType::Bridge: return BuildSys_Bridge(obj, sys_obj);
@@ -410,5 +422,126 @@ namespace shipfactory {
     }
 
 
+    /* -----------------------------------------------------------------
+        Builds the ship
+    ----------------------------------------------------------------- */
+    uptr<Ship> BuildShip(str uname) {
+        if(!ship_dict.contains(uname))return nullptr;
+        json obj = ship_dict.at(uname);
 
+        uptr<Ship> ship = std::make_unique<Ship>();
+
+        str name = obj.at("name");
+
+        ship->InitShip(name);
+
+        vec<json> comps = obj.at("comps");
+
+        for(
+            vec<json>::iterator it = comps.begin();
+            it != comps.end(); it++
+        ) {
+            json j = *it;
+            uptr<SSys> sys = BuildSSys(j);
+            if(sys!=nullptr) ship->AddSSys(std::move(sys));
+        }
+
+        return ship;
+    }
+
+
+    /* -----------------------------------------------------------------
+        Helper function
+    ----------------------------------------------------------------- */
+
+
+    void ShipToASCII(Ship * ship) {
+
+        int min_x=0;
+        int min_y=0;
+
+        vec<vec<str>> pic;
+        for(sizet x = 0; x < 100; x++) {
+            vec<str> v;
+            for(sizet y = 0; y < 100; y++) {
+                v.push_back(".");
+            }
+            pic.push_back(v);
+        }
+
+        ShipSystems & systems = ship->GetShipSystems();
+
+        for(
+            ShipSystems::iterator it = systems.begin();
+            it != systems.end();
+            it++
+        ) {
+            for(
+                vuptr<SSys>::iterator sit = it->second.begin();
+                sit != it->second.end();
+                sit++
+            ) {
+                Vec3i loc = (*sit)->GetRoomLocation();
+
+                if(loc.X() < min_x) min_x = loc.X();
+                if(loc.Y() < min_y) min_y = loc.Y();
+            }
+        }
+
+        min_x = std::abs(min_x);
+        min_y = std::abs(min_y);
+
+        for(
+            ShipSystems::iterator it = systems.begin();
+            it != systems.end();
+            it++
+        ) {
+            for(
+                vuptr<SSys>::iterator sit = it->second.begin();
+                sit != it->second.end();
+                sit++
+            ) {
+
+                str letter = ".";
+                switch(it->first) {
+                    case SSysType::Bridge: letter="B"; break;
+                    case SSysType::CargoHold: letter="O"; break;
+                    case SSysType::Cloak: letter="K"; break;
+                    case SSysType::CounterMeasure: letter="C"; break;
+                    case SSysType::FTLEngine: letter="F"; break;
+                    case SSysType::Hangar: letter="H"; break;
+                    case SSysType::Hull: letter="U"; break;
+                    case SSysType::Medbay: letter="M"; break;
+                    case SSysType::Quarters: letter="Q"; break;
+                    case SSysType::Reactor: letter="R"; break;
+                    case SSysType::RepairStation: letter="#"; break;
+                    case SSysType::Scanner: letter=">"; break;
+                    case SSysType::SecStation: letter="&"; break;
+                    case SSysType::Shield: letter=")"; break;
+                    case SSysType::STLEngine: letter="S"; break;
+                    case SSysType::TroopHold: letter="T"; break;
+                    case SSysType::Weapon: letter="W"; break;
+                    default: letter="!"; break;
+                }
+                Vec3i loc = (*sit)->GetRoomLocation();
+                Vec2i shape = (*sit)->GetRoomShape();
+
+                for(sizet y = 0; y < shape.Y(); y++) {
+                    for(sizet x = 0; x < shape.X(); x++) {
+                        pic[y+loc.Y()+min_y][x+loc.X()+min_x] = letter;
+                    }
+                }
+            }
+        }
+
+        std::ofstream ofs("pics/"+ship->GetName()+".txt");
+
+        
+        for(int y = 99; y >= 0; y--) {
+            for(int x = 0; x < 100 ; x++) {
+                ofs << pic[y][x] << " ";
+            }
+            ofs << "\n";
+        }
+    }
 }

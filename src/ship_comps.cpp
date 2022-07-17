@@ -292,7 +292,7 @@ void SSys::Init_SSys(
 //SSys::~SSys() {}
 
 str SSys::GetName() const { return name; }
-SSysType SSys::GetSCompType() const { return type; }
+SSysType SSys::GetSSysType() const { return type; }
 i64 SSys::GetStructuralHealth() const { return structural_health; }
 i64 SSys::GetSystemHealth() const { return system_health; }
 i64 SSys::GetEnergyReq() const { return energy_req; }

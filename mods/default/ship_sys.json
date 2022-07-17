@@ -28,7 +28,7 @@
         "energy_req": 10,
         "room_shape": [1,1],
         "num_crew": 1,
-        "job_type": "Scientist",
+        "job_type": "Science",
         "cloak_level":10
     },
     "counter_measure" : {

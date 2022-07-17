@@ -1,11 +1,14 @@
 #include"ship.hpp"
 
 Ship::Ship() 
-    :id(-1), name("NONAME")
+    : name("NONAME")
 {}
-Ship::Ship(i64 _id, str _name) 
-    :id(_id), name(_name)
-{
+
+void Ship::InitShip(
+    str _name
+) {
+
+    name = _name;
 
     for(int i = 0; i < static_cast<int>(SSysType::END); i++) {
         systems.emplace(
@@ -14,7 +17,24 @@ Ship::Ship(i64 _id, str _name)
     }
 }
 
-vuptr<SSys> & Ship::GetComponentList(SSysType type) {
+str Ship::GetName() const {
+    return name;
+}
+
+void Ship::AddSSys(uptr<SSys> sys) {
+    SSysType t = sys->GetSSysType();
+    vuptr<SSys> & l = GetSysList(t);
+    l.push_back(std::move(sys));
+}
+
+ShipSystems & Ship::GetShipSystems() {
+    return systems;
+}
+
+
+
+// PRIVATE
+vuptr<SSys> & Ship::GetSysList(SSysType type) {
     return systems.at(type);
 }
 

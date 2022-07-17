@@ -47,14 +47,17 @@ namespace shipfactory {
     uptr<SSTLEngine> BuildSys_STLEngine(json obj, json sys_obj);
     uptr<STroopHold> BuildSys_TroopHold(json obj, json sys_obj);
     uptr<SWeapon> BuildSys_Weapon(json obj, json sys_obj);
-    uptr<SSys> BuildSys(json obj);
+    uptr<SSys> BuildSSys(json obj);
  
  
     /* -----------------------------------------------------------------
         Builds the ship
     ----------------------------------------------------------------- */
-    uptr<Ship> BuildShip(str ship_name_unique);
+    uptr<Ship> BuildShip(str uname);
 
-    
+    /* -----------------------------------------------------------------
+        Helpers
+    ----------------------------------------------------------------- */
+    void ShipToASCII(Ship * ship);
 
 };

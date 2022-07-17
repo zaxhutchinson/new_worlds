@@ -11,7 +11,6 @@ using ShipCompartments = umap<Vec3i, uptr<SCompartment>>;
 
 class Ship {
 private:
-    i64 id;
     str name;
 
     vuptr<STeam> teams;
@@ -22,11 +21,19 @@ private:
 public:
 
     Ship();
-    Ship(i64 _id, str _name);
+    void InitShip(
+        str _name
+    );
+
+    str GetName() const;
+
+    void AddSSys(uptr<SSys> sys);
+    ShipSystems & GetShipSystems();
 
 private:
 
-    vuptr<SSys> & GetComponentList(SSysType type);
+    
+    vuptr<SSys> & GetSysList(SSysType type);
 
     void BuildCompartments();
 

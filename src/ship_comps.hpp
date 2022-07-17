@@ -251,7 +251,7 @@ public:
     );
 
     str GetName() const;
-    SSysType GetSCompType() const;
+    SSysType GetSSysType() const;
     i64 GetStructuralHealth() const;
     i64 GetSystemHealth() const;
     i64 GetEnergyReq() const;
