@@ -5,51 +5,193 @@
         "structural_health": 100,
         "system_health": 100,
         "energy_req": 10,
-        "room_location": [0,0,0],
         "room_shape": [1,1],
-        "num_teams": 1,
-        "team_type": "Command"
+        "num_crew": 1,
+        "job_type": "Command"
     },
     "cargohold" : {
-        
+        "name" : "Cargo Hold",
+        "type" : "CargoHold",
+        "structural_health": 100,
+        "system_health": 100,
+        "energy_req": 10,
+        "room_shape": [1,1],
+        "num_crew": 1,
+        "job_type": "Quartermaster",
+        "storage":100
+    },
+    "cloak" : {
+        "name" : "Cloaking Device",
+        "type" : "Cloak",
+        "structural_health": 100,
+        "system_health": 100,
+        "energy_req": 10,
+        "room_shape": [1,1],
+        "num_crew": 1,
+        "job_type": "Scientist",
+        "cloak_level":10
+    },
+    "counter_measure" : {
+        "name" : "Counter Measure",
+        "type" : "CounterMeasure",
+        "structural_health": 100,
+        "system_health": 100,
+        "energy_req": 10,
+        "room_shape": [1,1],
+        "num_crew": 1,
+        "job_type": "Operator",
+        "accuracy_reduction":0.9
     },
     "ftl_engine" : {
-
+        "name" : "FTL Engine",
+        "type" : "FTLEngine",
+        "structural_health": 100,
+        "system_health": 100,
+        "energy_req": 10,
+        "room_shape": [1,1],
+        "num_crew": 1,
+        "job_type": "Navigator",
+        "jump_distance":10000000,
+        "charge_rate":1
     },
     "hangar" : {
-
+        "name" : "Hangar",
+        "type" : "Hangar",
+        "structural_health": 100,
+        "system_health": 100,
+        "energy_req": 10,
+        "room_shape": [1,1],
+        "num_crew": 1,
+        "job_type": "Flight",
+        "hangar_storage":100
     },
     "hull" : {
-
+        "name" : "Hull",
+        "type" : "Hull",
+        "structural_health": 100,
+        "system_health": 100,
+        "energy_req": 10,
+        "room_shape": [1,1],
+        "num_crew": 0,
+        "job_type": "None"
     },
     "medbay" : {
-
+        "name" : "Med Bay",
+        "type" : "Medbay",
+        "structural_health": 100,
+        "system_health": 100,
+        "energy_req": 10,
+        "room_shape": [1,1],
+        "num_crew": 1,
+        "job_type": "Medic",
+        "beds":5,
+        "healing_rate":5
     },
     "quarters" : {
-
+        "name" : "Living Quarters",
+        "type" : "Quarters",
+        "structural_health": 100,
+        "system_health": 100,
+        "energy_req": 10,
+        "room_shape": [1,1],
+        "num_crew": 1,
+        "job_type": "Steward",
+        "num_crew_beds": 100,
+        "morale_increase_prob":0.25,
+        "stamina_increase_per_hour":5
     },
     "reactor" : {
-
+        "name" : "Reactor",
+        "type" : "Reactor",
+        "structural_health": 100,
+        "system_health": 100,
+        "energy_req": 10,
+        "room_shape": [1,1],
+        "num_crew": 1,
+        "job_type": "Engineer",
+        "energy_prod":200
     },
     "repair_station" : {
-
+        "name" : "Repair Station",
+        "type" : "RepairStation",
+        "structural_health": 100,
+        "system_health": 100,
+        "energy_req": 10,
+        "room_shape": [1,1],
+        "num_crew": 1,
+        "job_type": "Repair"
     },
     "scanner" : {
-
+        "name" : "Scanner",
+        "type" : "Scanner",
+        "structural_health": 100,
+        "system_health": 100,
+        "energy_req": 10,
+        "room_shape": [1,1],
+        "num_crew": 1,
+        "job_type": "Science",
+        "scan_distance":1000000,
+        "scan_penetration":1
     },
     "sec_station" : {
-
+        "name" : "Security Station",
+        "type" : "SecStation",
+        "structural_health": 100,
+        "system_health": 100,
+        "energy_req": 10,
+        "room_shape": [1,1],
+        "num_crew": 1,
+        "job_type": "Security"
     },
     "shield": {
-
+        "name" : "Shield",
+        "type" : "Shield",
+        "structural_health": 100,
+        "system_health": 100,
+        "energy_req": 10,
+        "room_shape": [1,1],
+        "num_crew": 1,
+        "job_type": "Operator",
+        "max_shield": 100,
+        "regen_shield": 1
     },
     "stl_engine": {
-
+        "name" : "STL Engine",
+        "type" : "STLEngine",
+        "structural_health": 100,
+        "system_health": 100,
+        "energy_req": 10,
+        "room_shape": [1,1],
+        "num_crew": 1,
+        "job_type": "Flight",
+        "thrust": 100
     },
     "troophold" : {
-
+        "name" : "Troop Hold",
+        "type" : "TroopHold",
+        "structural_health": 100,
+        "system_health": 100,
+        "energy_req": 10,
+        "room_shape": [1,1],
+        "num_crew": 1,
+        "job_type": "Steward",
+        "troops":100
     },
     "weapon" : {
-
+        "name" : "Weapon",
+        "type" : "Weapon",
+        "structural_health": 100,
+        "system_health": 100,
+        "energy_req": 10,
+        "room_shape": [1,1],
+        "num_crew": 1,
+        "job_type": "Gunner",
+        "dmg_structure":10,
+        "dmg_shields":10,
+        "dmg_systems":10,
+        "weapon_range":100000,
+        "target_size":15,
+        "target_rate":1,
+        "rate_of_fire":1
     }
 }

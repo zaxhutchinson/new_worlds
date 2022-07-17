@@ -1,10 +1,10 @@
 #include"ship.hpp"
 
 Ship::Ship() 
-    :id(-1), name("NONAME"), shape(Vec3i())
+    :id(-1), name("NONAME")
 {}
-Ship::Ship(i64 _id, str _name, Vec3i _shape) 
-    :id(_id), name(_name), shape(_shape)
+Ship::Ship(i64 _id, str _name) 
+    :id(_id), name(_name)
 {
 
     for(int i = 0; i < static_cast<int>(SSysType::END); i++) {
@@ -21,37 +21,10 @@ vuptr<SSys> & Ship::GetComponentList(SSysType type) {
 
 void Ship::BuildCompartments() {
 
-    /* -----------------------------------------------------------------------
-        Build all compartments as hulls 
-    ------------------------------------------------------------------------*/
-    vuptr<SSys> & syslist = GetComponentList(SSysType::Hull);
 
-    if(syslist.size()==0) return;   // design has empty hull syslist.
-
-    SSys * sys = syslist[0].get();
-
-    SHull * hull = dynamic_cast<SHull*>(sys);
-
-    if(!hull) return;   // sys was not a hull.
-
-    i64 system_health = hull->GetSystemHealth();
-    i64 structural_health = hull->GetStructuralHealth();
-
-    for(i64 x = 0; x < shape.X(); x++) {
-        for(i64 y = 0; y < shape.Y(); y++) {
-            for(i64 z = 0; z < shape.Z(); z++) {
-                uptr<SCompartment> comp = std::make_unique<SCompartment>(
-                    Vec3i(x,y,z),
-                    system_health,
-                    structural_health
-                );
-                compartments.emplace(Vec3i(x, y, z), std::move(comp));
-            }
-        }
-    }
 
     /* -----------------------------------------------------------------------
-        Populate other systems.
+        Populate systems.
     ------------------------------------------------------------------------*/
 
     for(

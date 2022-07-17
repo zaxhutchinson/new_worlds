@@ -1,6 +1,6 @@
 #pragma once
 
-
+#include"magic_enum.hpp"
 
 #include"zxlb.hpp"
 #include"vec3i.hpp"
@@ -11,7 +11,7 @@
     STeamType
 -------------------------------------------------------------------------- */
 
-enum class STeamType {
+enum class SJobType {
     Command,
     Medic,
     Repair,
@@ -23,10 +23,14 @@ enum class STeamType {
     Quartermaster,
     Steward,
     Inactive,
+    Operator,
+    Navigator,
     None,
 
     END
 };
+
+
 
 /* --------------------------------------------------------------------------
     SCompType
@@ -35,6 +39,8 @@ enum class STeamType {
 enum class SSysType {
     Bridge,
     CargoHold,
+    Cloak,
+    CounterMeasure,
     FTLEngine,
     Hangar,
     Hull,
@@ -121,7 +127,7 @@ private:
     i16 morale;
     // Wounds reduce health by the wound amt every 5 minutes.
     i16 wounds; 
-    STeamType job;
+    SJobType job;
     // 0 to 100
     i16 xp;
     bool active;
@@ -129,7 +135,7 @@ public:
     SCrew();
     SCrew(
         str _name,
-        STeamType _job
+        SJobType _job
     );
 
     str GetName();
@@ -137,7 +143,7 @@ public:
     i16 GetStamina();
     i16 GetMorale();
     i16 GetWounds();
-    STeamType GetSTeamType();
+    SJobType GetSTeamType();
     i16 GetXP();
     bool GetActive();
 
@@ -150,7 +156,7 @@ public:
     void ChangeMorale(i16 v);
     void SetWounds(i16 v);
     void ChangeWounds(i16 v);
-    void SetSTeamType(STeamType t);
+    void SetSJobType(SJobType t);
     void SetXP(i16 v);
     void ChangeXP(i16 v);
     void SetActive(bool v);
@@ -170,7 +176,7 @@ private:
     i64 id;
     sizet crew_size;
     vec<SCrew*> crew;
-    STeamType job;
+    SJobType job;
     SCompartment* comp;
     bool onduty;
 public:
@@ -178,13 +184,13 @@ public:
     STeam(
         i64 _id,
         sizet _crew_size,
-        STeamType _job
+        SJobType _job
     );
 
     i64 GetID() const;
     sizet GetCrewSize() const;
     vec<SCrew*> GetCrew();
-    STeamType GetTeamType() const;
+    SJobType GetTeamType() const;
     SCompartment* GetCompartment() const;
     bool GetOnduty() const;
 
@@ -192,7 +198,7 @@ public:
     void AddCrew(SCrew * crewman);
     void RemoveCrew(sizet index);
     void RemoveAllCrew();
-    void SetSTeamType(STeamType type);
+    void SetSTeamType(SJobType type);
     void SetCompartment(SCompartment * c);
     void SetOnduty(bool b);
 
@@ -211,6 +217,7 @@ public:
 -------------------------------------------------------------------------- */
 class SSys {
 protected:
+    str name;
     SSysType type;
     i64 structural_health;      // structural health of each compartment.
     i64 system_health;          // system health of each compartment.
@@ -218,14 +225,14 @@ protected:
     Vec3i room_location;
     Vec2i room_shape;           // The 2d shape of the room.
     vec<SCompartment*> compartments;
-    i64 num_teams;              // teams this sys should have.
-    STeamType team_type;        // the type of teams this sys needs.
-    vec<STeam*> teams;          // the actual teams.
+    i64 num_crew;              // teams this sys should have.
+    SJobType job_type;        // the type of teams this sys needs.
+    vec<SCrew*> crew;          // the actual teams.
 
-    i64 cur_avg_morale_of_all_teams;
-    i64 cur_avg_health_of_all_teams;
-    i64 cur_avg_stamina_of_all_teams;
-    i64 cur_avg_readiness_of_all_teams;
+    i64 cur_avg_morale_of_all_crew;
+    i64 cur_avg_health_of_all_crew;
+    i64 cur_avg_stamina_of_all_crew;
+    i64 cur_avg_readiness_of_all_crew;
     i64 cur_avg_xp_of_all_crew;
     double crew_stats_scalar_on_operations;
 
@@ -234,16 +241,16 @@ public:
     virtual ~SSys() = default;
 
     void Init_SSys(
+        str _name,
         SSysType _type, 
         i64 _structural_health,
         i64 _system_health,
         i64 _energy_req,
-        Vec3i _room_location,
-        Vec2i _room_shape,
-        i64 _num_teams,
-        STeamType _team_type
+        i64 _num_crew,
+        SJobType _team_type
     );
 
+    str GetName() const;
     SSysType GetSCompType() const;
     i64 GetStructuralHealth() const;
     i64 GetSystemHealth() const;
@@ -251,36 +258,35 @@ public:
     Vec3i GetRoomLocation() const;
     Vec2i GetRoomShape() const;
     vec<SCompartment*>& GetCompartments();
-    i64 GetNumTeams() const;
-    STeamType GetTeamType() const;
-    vec<STeam*>& GetTeams();
+    i64 GetNumCrew() const;
+    SJobType GetJobType() const;
+    vec<SCrew*>& GetCrew();
 
     void SetStructuralHealth(i64 _structural_health);
     void SetSystemHealth(i64 _system_health);
     void SetEnergyReq(i64 _energy_req);
     void SetRoomLocation(Vec3i _room_location);
     void SetRoomShape(Vec2i _room_shape);
-    void SetNumTeams(i64 _num_teams);
+    void SetNumCrew(i64 _num_crew);
     void AddCompartment(SCompartment * comp);
     SCompartment * GetRandomCompartment(RNG & rng);
     void RemoveCompartments();
 
-    void AddTeam(STeam * team);
-    void RemoveTeam(i64 _id);
-    void RemoveAllTeams();
+    void AddCrew(SCrew * _crew);
+    void RemoveCrew(sizet index);
+    void RemoveAllCrew();
     i64 GetCrewDeficit();
-    vec<STeam*> GetTeamsWithDeficit();
 
     /* Updates the temp variables associated with team statistics. 
         This gets called each turn so that every time these aggregate
         stats are recomputed.
     */
-    void UpdateTeamStats();
+    void UpdateCrewStats();
 
-    i64 CurAvgReadinessOfAllTeams();
-    i64 CurAvgHealthOfAllTeams();
-    i64 CurAvgMoraleOfAllTeams();
-    i64 CurAvgStaminaOfAllTeams();
+    i64 CurAvgReadinessOfAllCrew();
+    i64 CurAvgHealthOfAllCrew();
+    i64 CurAvgMoraleOfAllCrew();
+    i64 CurAvgStaminaOfAllCrew();
     i64 CurAvgXPOfAllCrew();
     
 
@@ -445,7 +451,6 @@ public:
     SShield();
     void Init_SShield(
         i64 _max_shield,
-        i64 _cur_shield,
         i64 _regen_shield
     );
 
@@ -734,6 +739,39 @@ public:
     void Init_SHull();
 };
 
-// Add Cloaking System: opposes scanner.
+/* --------------------------------------------------------------------------
+    SCloak
+-------------------------------------------------------------------------- */
 
-// Add Countermeasure System: opposes weapon targeting.
+class SCloak : public SSys {
+protected:
+    i64 cloak_level;
+
+public:
+    SCloak();
+    void Init_SCloak(
+        i64 _cloak_level
+    );
+
+    i64 GetCloakLevel();
+    void SetCloakLevel(i64 _cloak_level);
+};
+
+/* --------------------------------------------------------------------------
+    SCounterMeasure
+-------------------------------------------------------------------------- */
+
+class SCounterMeasure : public SSys {
+    protected:
+        double accuracy_reduction;
+    public:
+        SCounterMeasure();
+        void Init_SCounterMeasure(
+            double _accuracy_reduction
+        );
+
+        double GetAccuracyReduction();
+        void SetAccuracyReduction(
+            double _accuracy_reduction
+        );
+};

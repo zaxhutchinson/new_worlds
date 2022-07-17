@@ -58,11 +58,11 @@ void SCompartment::ChangeStructuralHealth(i64 amt) {
 -------------------------------------------------------------------------- */
 SCrew::SCrew()
     :name("NONAME"), health(100), stamina(100), morale(100), 
-        wounds(0), job(STeamType::Inactive), xp(0), active(true)
+        wounds(0), job(SJobType::Inactive), xp(0), active(true)
 {}
 SCrew::SCrew(
     str _name,
-    STeamType _job
+    SJobType _job
 )   :name(_name), health(INT8_MAX), stamina(100), morale(100), 
         wounds(0), job(_job), xp(0), active(true)
 {}
@@ -72,7 +72,7 @@ i16 SCrew::GetHealth() { return health; }
 i16 SCrew::GetStamina() { return stamina; }
 i16 SCrew::GetMorale() { return morale; }
 i16 SCrew::GetWounds() { return wounds; }
-STeamType SCrew::GetSTeamType() { return job; }
+SJobType SCrew::GetSTeamType() { return job; }
 i16 SCrew::GetXP() { return xp; }
 bool SCrew::GetActive() { return active; }
 
@@ -109,7 +109,7 @@ void SCrew::SetWounds(i16 v) {
 void SCrew::ChangeWounds(i16 v) {
     SetWounds(wounds+v);
 }
-void SCrew::SetSTeamType(STeamType t) { job = t; }
+void SCrew::SetSJobType(SJobType t) { job = t; }
 void SCrew::SetXP(i16 v) {
     xp = v;
     if(xp < 0) xp = 0;
@@ -150,13 +150,13 @@ void SCrew::ApplyWoundsToHealth() {
 -------------------------------------------------------------------------- */
 
 STeam::STeam()
-    : id(-1), crew_size(0), job(STeamType::Inactive), comp(nullptr), onduty(false)
+    : id(-1), crew_size(0), job(SJobType::Inactive), comp(nullptr), onduty(false)
 {}
 
 STeam::STeam(
     i64 _id,
     sizet _crew_size,
-    STeamType _job
+    SJobType _job
 )
     : id(_id), crew_size(_crew_size), job(_job), comp(nullptr), onduty(false)
 {}
@@ -164,7 +164,7 @@ STeam::STeam(
 i64 STeam::GetID() const { return id; }
 sizet STeam::GetCrewSize() const { return crew_size; }
 vec<SCrew*> STeam::GetCrew() { return crew; }
-STeamType STeam::GetTeamType() const { return job; }
+SJobType STeam::GetTeamType() const { return job; }
 SCompartment* STeam::GetCompartment() const { return comp; }
 bool STeam::GetOnduty() const { return onduty; }
 
@@ -177,7 +177,7 @@ void STeam::RemoveCrew(sizet index) {
     }
 }
 void STeam::RemoveAllCrew() { crew.clear(); }
-void STeam::SetSTeamType(STeamType type) { job = type; }
+void STeam::SetSTeamType(SJobType type) { job = type; }
 void STeam::SetCompartment(SCompartment * c) { comp = c; }
 void STeam::SetOnduty(bool b) { onduty = b; }
 
@@ -266,33 +266,32 @@ i64 STeam::GetAverageXP() {
     SSys
 -------------------------------------------------------------------------- */
 SSys::SSys()
-    :type(SSysType::Hull), structural_health(0), system_health(0),
+    :name("MISSING"),type(SSysType::Hull), structural_health(0), system_health(0),
     energy_req(0), room_shape(Vec2i()), 
-    num_teams(0),team_type(STeamType::None)
+    num_crew(0),job_type(SJobType::None)
 {}
 
 void SSys::Init_SSys(
+    str _name,
     SSysType _type, 
     i64 _structural_health,
     i64 _system_health,
     i64 _energy_req,
-    Vec3i _room_location,
-    Vec2i _room_shape,
-    i64 _num_teams,
-    STeamType _team_type  
+    i64 _num_crew,
+    SJobType _job_type  
 ) {
+    name=_name;
     type=_type; 
     structural_health=_structural_health; 
     system_health=_system_health;
     energy_req=_energy_req;
-    room_location = _room_location;
-    room_shape = _room_shape;
-    num_teams=_num_teams; 
-    team_type=_team_type;
+    num_crew=_num_crew; 
+    job_type=_job_type;
 }
 
 //SSys::~SSys() {}
 
+str SSys::GetName() const { return name; }
 SSysType SSys::GetSCompType() const { return type; }
 i64 SSys::GetStructuralHealth() const { return structural_health; }
 i64 SSys::GetSystemHealth() const { return system_health; }
@@ -300,16 +299,16 @@ i64 SSys::GetEnergyReq() const { return energy_req; }
 Vec3i SSys::GetRoomLocation() const { return room_location; }
 Vec2i SSys::GetRoomShape() const { return room_shape; }
 vec<SCompartment*>& SSys::GetCompartments() { return compartments; }
-i64 SSys::GetNumTeams() const { return num_teams; }
-STeamType SSys::GetTeamType() const { return team_type; }
-vec<STeam*>& SSys::GetTeams() { return teams; }
+i64 SSys::GetNumCrew() const { return num_crew; }
+SJobType SSys::GetJobType() const { return job_type; }
+vec<SCrew*>& SSys::GetCrew() { return crew; }
 
 void SSys::SetStructuralHealth(i64 _structural_health) {structural_health = _structural_health;}
 void SSys::SetSystemHealth(i64 _system_health) {system_health=_system_health;}
 void SSys::SetEnergyReq(i64 _energy_req) {energy_req=_energy_req;}
 void SSys::SetRoomLocation(Vec3i _room_location) { room_location = _room_location; }
 void SSys::SetRoomShape(Vec2i _room_shape) {room_shape=_room_shape;}
-void SSys::SetNumTeams(i64 _num_teams) {num_teams=_num_teams;}
+void SSys::SetNumCrew(i64 _num_teams) {num_crew=_num_teams;}
 
 void SSys::AddCompartment(SCompartment * comp) {compartments.push_back(comp);}
 SCompartment * SSys::GetRandomCompartment(RNG & rng) {
@@ -318,82 +317,66 @@ SCompartment * SSys::GetRandomCompartment(RNG & rng) {
 }
 void SSys::RemoveCompartments() {compartments.clear();}
 
-void SSys::AddTeam(STeam * team) {teams.push_back(team);}
-void SSys::RemoveTeam(i64 _id) {
-    for(
-        vec<STeam*>::iterator it = teams.begin();
-        it != teams.end();
-        it++
-    ) {
-        if( (*it)->GetID() == _id ) {
-            teams.erase(it);
-            return;
-        }
+void SSys::AddCrew(SCrew * _crew) {crew.push_back(_crew);}
+void SSys::RemoveCrew(sizet index) {
+    if(index < crew.size() ) {
+        vec<SCrew*>::iterator it = crew.begin()+index;
+        crew.erase(it);
     }
 }
-void SSys::RemoveAllTeams() {teams.clear();}
+void SSys::RemoveAllCrew() {crew.clear();}
 i64 SSys::GetCrewDeficit() {
     i64 deficit = 0;
     for(
-        vec<STeam*>::iterator it = teams.begin();
-        it != teams.end();
+        vec<SCrew*>::iterator it = crew.begin();
+        it != crew.end();
         it++
     ) {
-        deficit += (*it)->GetNumDisableCrew();
+        if(!(*it)->GetActive()) {
+            deficit += 1;
+        }
     }
     return deficit;
 }
-vec<STeam*> SSys::GetTeamsWithDeficit() {
-    vec<STeam*> t;
-    for(
-        vec<STeam*>::iterator it = teams.begin();
-        it != teams.end();
-        it++
-    ) {
-        if((*it)->GetNumDisableCrew() > 0) {
-            t.push_back(*it);
-        }
-    }
-    return t;
-}
 
-void SSys::UpdateTeamStats() {
+
+void SSys::UpdateCrewStats() {
 
     // Average team stats.
-    cur_avg_readiness_of_all_teams = 0;
-    cur_avg_health_of_all_teams = 0;
-    cur_avg_morale_of_all_teams = 0;
-    cur_avg_stamina_of_all_teams = 0;
+    cur_avg_readiness_of_all_crew = 0;
+    cur_avg_health_of_all_crew = 0;
+    cur_avg_morale_of_all_crew = 0;
+    cur_avg_stamina_of_all_crew = 0;
     cur_avg_xp_of_all_crew = 0;
 
     for(
-        vec<STeam*>::iterator it = teams.begin();
-        it != teams.end();
+        vec<SCrew*>::iterator it = crew.begin();
+        it != crew.end();
         it++
     ) {
-        cur_avg_readiness_of_all_teams += (*it)->GetAverageReadiness();
-        cur_avg_health_of_all_teams += (*it)->GetAverageHealth();
-        cur_avg_morale_of_all_teams += (*it)->GetAverageMorale();
-        cur_avg_stamina_of_all_teams += (*it)->GetAverageStamina();
-        cur_avg_xp_of_all_crew += (*it)->GetAverageXP();
+        cur_avg_readiness_of_all_crew += (*it)->GetReadiness();
+        cur_avg_health_of_all_crew += (*it)->GetHealth();
+        cur_avg_morale_of_all_crew += (*it)->GetMorale();
+        cur_avg_stamina_of_all_crew += (*it)->GetStamina();
+        cur_avg_xp_of_all_crew += (*it)->GetXP();
     }
-    cur_avg_readiness_of_all_teams /= num_teams;
-    cur_avg_health_of_all_teams /= num_teams;
-    cur_avg_morale_of_all_teams /= num_teams;
-    cur_avg_stamina_of_all_teams /= num_teams;
-    cur_avg_xp_of_all_crew /= num_teams;
+    cur_avg_readiness_of_all_crew /= num_crew;
+    cur_avg_health_of_all_crew /= num_crew;
+    cur_avg_morale_of_all_crew /= num_crew;
+    cur_avg_stamina_of_all_crew /= num_crew;
+    cur_avg_xp_of_all_crew /= num_crew;
 
     // operations scalar
     crew_stats_scalar_on_operations = 
-        (static_cast<double>(cur_avg_readiness_of_all_teams) / 100.0) +
+        (static_cast<double>(cur_avg_readiness_of_all_crew) / 100.0) +
         (cur_avg_xp_of_all_crew / 1000.0);
 }
 
 i64 SSys::CurAvgXPOfAllCrew() { return cur_avg_xp_of_all_crew; }
-i64 SSys::CurAvgReadinessOfAllTeams() {return cur_avg_readiness_of_all_teams;}
-i64 SSys::CurAvgHealthOfAllTeams() {return cur_avg_health_of_all_teams;}
-i64 SSys::CurAvgMoraleOfAllTeams() {return cur_avg_morale_of_all_teams;}
-i64 SSys::CurAvgStaminaOfAllTeams() {return cur_avg_stamina_of_all_teams;}
+i64 SSys::CurAvgReadinessOfAllCrew() {return cur_avg_readiness_of_all_crew;}
+i64 SSys::CurAvgHealthOfAllCrew() {return cur_avg_health_of_all_crew;}
+i64 SSys::CurAvgMoraleOfAllCrew() {return cur_avg_morale_of_all_crew;}
+i64 SSys::CurAvgStaminaOfAllCrew() {return cur_avg_stamina_of_all_crew;}
 
 double SSys::Effective_GetCrewScalarOnOperations() {
     return crew_stats_scalar_on_operations;
@@ -552,11 +535,10 @@ SShield::SShield()
 
 void SShield::Init_SShield(
     i64 _max_shield,
-    i64 _cur_shield,
     i64 _regen_shield
 ) {
     max_shield=_max_shield; 
-    cur_shield=_cur_shield; 
+    cur_shield=_max_shield; 
     regen_shield=_regen_shield;
 }
 
@@ -916,4 +898,46 @@ SHull::SHull()
 
 void SHull::Init_SHull() {
 
+}
+
+/* --------------------------------------------------------------------------
+    SCloak
+-------------------------------------------------------------------------- */
+
+SCloak::SCloak() 
+    : SSys()
+{}
+void SCloak::Init_SCloak(
+    i64 _cloak_level
+) {
+    cloak_level = _cloak_level;
+}
+
+i64 SCloak::GetCloakLevel() {
+    return cloak_level;
+}
+void SCloak::SetCloakLevel(i64 _cloak_level) {
+    cloak_level = _cloak_level;
+}
+
+/* --------------------------------------------------------------------------
+    SCounterMeasure
+-------------------------------------------------------------------------- */
+
+SCounterMeasure::SCounterMeasure()
+    : SSys()
+{}
+void SCounterMeasure::Init_SCounterMeasure(
+    double _accuracy_reduction
+) {
+    accuracy_reduction = _accuracy_reduction;
+}
+
+double SCounterMeasure::GetAccuracyReduction() { 
+    return accuracy_reduction; 
+}
+void SCounterMeasure::SetAccuracyReduction(
+    double _accuracy_reduction
+) {
+    accuracy_reduction = _accuracy_reduction;
 }

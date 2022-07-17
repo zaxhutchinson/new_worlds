@@ -13,7 +13,6 @@ class Ship {
 private:
     i64 id;
     str name;
-    Vec3i shape;
 
     vuptr<STeam> teams;
     vuptr<SCrew> crew;
@@ -23,7 +22,7 @@ private:
 public:
 
     Ship();
-    Ship(i64 _id, str _name, Vec3i _shape);
+    Ship(i64 _id, str _name);
 
 private:
 
