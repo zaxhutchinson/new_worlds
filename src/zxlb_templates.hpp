@@ -17,6 +17,7 @@
 #include<fmt/core.h>
 #include<fmt/format.h>
 #include<fmt/os.h>
+#include<fmt/color.h>
 
 #include"sole.hpp"
 

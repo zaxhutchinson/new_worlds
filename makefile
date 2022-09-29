@@ -3,13 +3,25 @@
 
 CC=g++ # define the compiler to use
 TARGET=new_worlds # define the name of the executable
+CFLAGS = -c -Wall
+LFLAGS= -Llib -lm -lfmt
+UNAME := $(shell uname)
 
+ifeq ($(UNAME), Darwin)
 # RELEASE
-# CFLAGS= -c -std=c++20 -Wall -O3
+# CFLAGS= -std=c++2a -Ofast
 # DEBUG
-CFLAGS= -c -std=c++20 -Wall -g3
+CFLAGS+= -std=c++2a -g3
+endif
 
-LFLAGS= -Llib -lm #-lsfml-graphics -lsfml-window -lsfml-system -lfmt
+ifeq ($(UNAME), Linux)
+# RELEASE
+# CFLAGS= -std=c++20 -O3
+# DEBUG
+CFLAGS+= -std=c++20 -g3
+endif
+
+ #-lsfml-graphics -lsfml-window -lsfml-system -lfmt
 SRCDIR = src
 OBJDIR = obj
 INCLUDE = -Iinc
