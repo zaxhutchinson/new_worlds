@@ -18,18 +18,20 @@ System::System(
     ID _id, 
     str _name, 
     str _desc,
+    Vec2i _position,
     vec<double> & _resources,
     vec<double> & _infrastructure,
     double _stability,
     double _economy
 )
-    : id(_id), name(_name), desc(_desc),
+    : id(_id), name(_name), desc(_desc), position(_position),
         resources(_resources), infrastructure(_infrastructure),
         stability(_stability), economy(_economy)
 {}
 ID System::GetID() const { return id; }
 str System::GetName() const { return name; }
 str System::GetDesc() const { return desc; }
+Vec2i System::GetPosition() const { return position; }
 double System::GetBaseResource(ResType t) const { 
     return resources[static_cast<int>(t)]; 
 }
@@ -66,30 +68,24 @@ double System::CalculateTaxes() {
     return taxes;
 }
 
-void System::LowerStability(double amt) {
-    stability -= amt;
+void System::ChangeStability(double amt) {
+    stability += amt;
     if(stability < 0) {
         stability = 0;
-    }
-}
-void System::RaiseStability(double amt) {
-    stability += amt;
-    if(stability > MAX_STABILITY) {
+    } else if(stability > MAX_STABILITY) {
         stability = MAX_STABILITY;
     }
 }
-void System::LowerEconomy(double amt) {
-    economy -= amt;
+
+void System::ChangeEconomy(double amt) {
+    economy += amt;
     if(economy < 0) {
         economy = 0;
-    }
-}
-void System::RaiseEconomy(double amt) {
-    economy += amt;
-    if(economy > MAX_ECONOMY) {
+    } else if(economy > MAX_ECONOMY) {
         economy = MAX_ECONOMY;
     }
 }
+
 
 void System::ChangeLoyalty(ID id, double amt) {
     int new_loyalty = loyalty.at(id) + amt;

@@ -1,7 +1,7 @@
 #pragma once
 
 #include"zxlb.hpp"
-
+#include"vec2i.hpp"
 
 enum class ResType {
     Population,
@@ -26,6 +26,7 @@ private:
     ID id;
     str name;
     str desc;
+    Vec2i position;
     vec<double> resources;
     vec<double> infrastructure;
     double stability;
@@ -37,6 +38,7 @@ public:
         ID _id, 
         str _name, 
         str _desc,
+        Vec2i _position,
         vec<double> & _resources,
         vec<double> & _infrastructure,
         double _stability,
@@ -49,6 +51,7 @@ public:
     ID GetID() const;
     str GetName() const;
     str GetDesc() const;
+    Vec2i GetPosition() const;
     double GetBaseResource(ResType t) const;
     double GetEconomy() const;
     double GetInfrastructure(ResType t) const;
@@ -61,10 +64,8 @@ public:
 
     double CalculateTaxes();
 
-    void LowerStability(double amt);
-    void RaiseStability(double amt);
-    void LowerEconomy(double amt);
-    void RaiseEconomy(double amt);
+    void ChangeStability(double amt);
+    void ChangeEconomy(double amt);
     void ChangeLoyalty(ID id, double amt);
 
 };
