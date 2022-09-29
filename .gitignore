@@ -1,9 +1,6 @@
 /.vscode
 /obj
-<<<<<<< HEAD
 /old
-=======
-/pics
->>>>>>> 2f166168b6359c24947f8ec9cd56517600e55474
 
+.DS_store
 new_worlds
