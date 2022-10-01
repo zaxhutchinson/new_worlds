@@ -1,0 +1,20 @@
+{
+    "samorim" : {
+        "name" : "Samorim",
+        "desc" : "Samorim is a planet of plenty. It has an old, but not very large population.",
+        "position": [1,1],
+        "resources": [4,1,0],
+        "infrastructure":[50,50,50],
+        "stability":100,
+        "economy":100
+    },
+    "cadia" : {
+        "name" : "Cadia",
+        "desc" : "Cadia is a dry planet. It is rich in precious minerals.",
+        "position": [8,29],
+        "resources": [2,8,1],
+        "infrastructure":[10,50,5],
+        "stability":80,
+        "economy":80
+    }
+}

@@ -5,7 +5,7 @@
 // static const int MAX_ECONOMY;
 
 System::System() 
-    : id(-1), name("NONE"), desc("NONE"),
+    : id(ID()), name("NONE"), desc("NONE"),
         stability(0), economy(0.0)
 {
     for(sizet i = 0; i < static_cast<sizet>(ResType::END); i++) {

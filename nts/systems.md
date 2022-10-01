@@ -22,3 +22,16 @@ Stability represents the safety of the population. It lowers the economy.
 
 Loyalty is 0 to 100. As loyalty drops it is more likely for events to occur
 which lower stability, infrastructure or destroy facilities.
+
+Systems:
+    Population
+    Minerals
+    Fuel
+
+Invest in two things:
+    Capacity: Ability to build ships
+    Infrastructure: Ability to extract resources from System attributes.
+
+No economy
+
+Stablity scales extraction.

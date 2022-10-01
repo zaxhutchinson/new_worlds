@@ -59,5 +59,5 @@ using u32 = uint32_t;
 using u64 = uint64_t;
 using sizet = std::size_t;
 
-using ID = i64;
+using ID = str;
 using UUID = sole::uuid;

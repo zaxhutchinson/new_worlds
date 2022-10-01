@@ -5,16 +5,17 @@
 
 enum class ResType {
     Population,
-    Materiel,
+    Capacity,
+    Minerals,
     Fuel,
-
     END
 };
 
 
 class System {
 private:
-    static constexpr double INFRASTRUCTURE_MULTIPLIER_BASE[3] = {
+    static constexpr double INFRASTRUCTURE_MULTIPLIER_BASE[4] = {
+        10.0,
         10.0,
         10.0,
         10.0
