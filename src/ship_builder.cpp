@@ -128,9 +128,9 @@ Ship ShipBuilder::BuildShip(ID id) {
         ID cid = it->at("id");
         int amt = it->at("amt");
         for(int i = 0; i < amt; i++) {
-            Engine e = BuildEngine(cid);
+            Comp e = BuildEngine(cid);
             e.SetLayer(layer_num);
-            ship.AddEngine(std::move(e));
+            ship.AddComp(std::move(e));
         }
     }
 
@@ -143,9 +143,9 @@ Ship ShipBuilder::BuildShip(ID id) {
         ID cid = it->at("id");
         int amt = it->at("amt");
         for(int i = 0; i < amt; i++) {
-            Weapon w = BuildWeapon(cid);
+            Comp w = BuildWeapon(cid);
             w.SetLayer(layer_num);
-            ship.AddWeapon(std::move(w));
+            ship.AddComp(std::move(w));
         }
     }
 
@@ -158,9 +158,9 @@ Ship ShipBuilder::BuildShip(ID id) {
         ID cid = it->at("id");
         int amt = it->at("amt");
         for(int i = 0; i < amt; i++) {
-            Reactor r = BuildReactor(cid);
+            Comp r = BuildReactor(cid);
             r.SetLayer(layer_num);
-            ship.AddReactor(std::move(r));
+            ship.AddComp(std::move(r));
         }
     }
 
@@ -173,9 +173,9 @@ Ship ShipBuilder::BuildShip(ID id) {
         ID cid = it->at("id");
         int amt = it->at("amt");
         for(int i = 0; i < amt; i++) {
-            Shields s = BuildShield(cid);
+            Comp s = BuildShield(cid);
             s.SetLayer(layer_num);
-            ship.AddShields(std::move(s));
+            ship.AddComp(std::move(s));
         }
     }
 
@@ -188,9 +188,9 @@ Ship ShipBuilder::BuildShip(ID id) {
         ID cid = it->at("id");
         int amt = it->at("amt");
         for(int i = 0; i < amt; i++) {
-            MogDrive m = BuildMogDrive(cid);
+            Comp m = BuildMogDrive(cid);
             m.SetLayer(layer_num);
-            ship.AddMogDrive(std::move(m));
+            ship.AddComp(std::move(m));
         }
     }
 
@@ -198,8 +198,7 @@ Ship ShipBuilder::BuildShip(ID id) {
     return ship;
 }
 
-Engine ShipBuilder::BuildEngine(ID id) {
-    nlohmann::json j = engine_templates.at(id);
+Comp ShipBuilder::BuildComp(ID id, CompType ct, nlohmann::json j) {
 
     str name = j.at("name");
     str desc = j.at("desc");
@@ -207,102 +206,67 @@ Engine ShipBuilder::BuildEngine(ID id) {
     double max_health = j.at("max_health");
     double mass = j.at("mass");
     double energy_req = j.at("energy_req");
-    double thrust = j.at("thrust");
 
     Crew crew(crew_size);
 
-    Engine e(
-        id, name, desc, crew, max_health, max_health,
-        mass, energy_req, thrust
-    );
+    Comp comp(id, ct, name, desc, crew, max_health, max_health,
+        mass, energy_req);
 
-    return e;
-
+    return comp;
 }
-Weapon ShipBuilder::BuildWeapon(ID id) {
-    nlohmann::json j = weapon_templates.at(id);
 
-    str name = j.at("name");
-    str desc = j.at("desc");
-    int crew_size = j.at("crew_size");
-    double max_health = j.at("max_health");
-    double mass = j.at("mass");
-    double energy_req = j.at("energy_req");
+Comp ShipBuilder::BuildEngine(ID id) {
+    nlohmann::json j = engine_templates.at(id);
+    Comp comp = BuildComp(id, CompType::Engine, j);
+    double thrust = j.at("thrust");
+    uptr<Engine> engine = std::make_unique<Engine>(thrust);
+    comp.SetEngine(std::move(engine));
+    return comp;
+}
+Comp ShipBuilder::BuildWeapon(ID id) {
+    nlohmann::json j = weapon_templates.at(id);
+    Comp comp = BuildComp(id, CompType::Weapon, j);
     double damage = j.at("damage");
     double target_speed = j.at("target_speed");
     double rate_of_fire = j.at("rate_of_fire");
     double range = j.at("range");
     double projectile_speed = j.at("projectile_speed");
-
-    Crew crew(crew_size);
-
-    Weapon w(
-        id, name, desc, crew, max_health, max_health, mass, energy_req,
+    uptr<Weapon> weapon = std::make_unique<Weapon>(
         damage, target_speed, rate_of_fire, range, projectile_speed
     );
-
-    return w;
+    comp.SetWeapon(std::move(weapon));
+    return comp;
 }
-Reactor ShipBuilder::BuildReactor(ID id) {
+Comp ShipBuilder::BuildReactor(ID id) {
     nlohmann::json j = reactor_templates.at(id);
-
-    str name = j.at("name");
-    str desc = j.at("desc");
-    int crew_size = j.at("crew_size");
-    double max_health = j.at("max_health");
-    double mass = j.at("mass");
-    double energy_req = j.at("energy_req");
+    Comp comp = BuildComp(id, CompType::Reactor, j);
     double energy_output = j.at("energy_output");
     double fuel_req = j.at("fuel_req");
-
-    Crew crew(crew_size);
-
-    Reactor r(
-        id, name, desc, crew, max_health, max_health, mass, energy_req,
+    uptr<Reactor> reactor = std::make_unique<Reactor>(
         energy_output, fuel_req
     );
-
-    return r;
+    comp.SetReactor(std::move(reactor));
+    return comp;
 }
-Shields ShipBuilder::BuildShield(ID id) {
+Comp ShipBuilder::BuildShield(ID id) {
     nlohmann::json j = shield_templates.at(id);
-
-    str name = j.at("name");
-    str desc = j.at("desc");
-    int crew_size = j.at("crew_size");
-    double max_health = j.at("max_health");
-    double mass = j.at("mass");
-    double energy_req = j.at("energy_req");
+    Comp comp = BuildComp(id, CompType::Shields, j);
     double damage_reduction = j.at("damage_reduction");
-
-    Crew crew(crew_size);
-
-    Shields s(
-        id, name, desc, crew, max_health, max_health, mass, energy_req,
+    uptr<Shields> shields = std::make_unique<Shields>(
         damage_reduction
     );
-
-    return s;
+    comp.SetShields(std::move(shields));
+    return comp;
 }
-MogDrive ShipBuilder::BuildMogDrive(ID id) {
+Comp ShipBuilder::BuildMogDrive(ID id) {
     nlohmann::json j = mogdrive_templates.at(id);
-
-    str name = j.at("name");
-    str desc = j.at("desc");
-    int crew_size = j.at("crew_size");
-    double max_health = j.at("max_health");
-    double mass = j.at("mass");
-    double energy_req = j.at("energy_req");
+    Comp comp = BuildComp(id, CompType::MogDrive, j);
     double carry_mass = j.at("carry_mass");
     double carry_range = j.at("carry_range");
     double charge_time = j.at("charge_time");
-
-    Crew crew(crew_size);
-
-    MogDrive m(
-        id, name, desc, crew, max_health, max_health, mass, energy_req,
+    uptr<MogDrive> mogdrive = std::make_unique<MogDrive>(
         carry_mass, carry_range, charge_time
     );
-
-    return m;
+    comp.SetMogDrive(std::move(mogdrive));
+    return comp;
 }

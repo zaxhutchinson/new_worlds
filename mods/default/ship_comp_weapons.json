@@ -1,15 +1,15 @@
 {
-    "point_defence": {
-        "name": "Point Defense",
-        "desc": "A point defense cannon designed to stop fighters.",
-        "crew_size": 4,
+    "railgun_1": {
+        "name": "Rail Gun, Version 1",
+        "desc": "A rail gun.",
+        "crew_size": 10,
         "max_health": 100.0,
-        "mass": 1.0,
+        "mass": 20.0,
         "energy_req":10,
-        "damage": 1.0,
-        "target_speed": 100.0,
-        "rate_of_fire": 10.0,
-        "range": 10.0,
-        "projectile_speed": 10.0
+        "damage": 25.0,
+        "target_speed": 10.0,
+        "rate_of_fire": 1.0,
+        "range": 1000.0,
+        "projectile_speed": 100.0
     }
 }

@@ -11,7 +11,10 @@ int main(int argc, char** argv) {
     ShipBuilder sb;
     sb.LoadTemplates("default");
     Ship ship = sb.BuildShip("ship_2");
-    std::cout << ship.GetName() << " " << ship.GetShields()[0].GetDesc() << std::endl;
+    std::cout << ship.GetName() << " " 
+        << ship.GetTotalEnergyOutput() << " "
+        << ship.GetTotalEnergyReq()
+        << std::endl;
 
     return 0;
 }

@@ -29,9 +29,12 @@ public:
     void LoadMogDriveTemplates(str modname);
 
     Ship BuildShip(ID id);
-    Engine BuildEngine(ID id);
-    Weapon BuildWeapon(ID id);
-    Reactor BuildReactor(ID id);
-    Shields BuildShield(ID id);
-    MogDrive BuildMogDrive(ID id);
+
+    Comp BuildComp(ID id, CompType ct, nlohmann::json j);
+
+    Comp BuildEngine(ID id);
+    Comp BuildWeapon(ID id);
+    Comp BuildReactor(ID id);
+    Comp BuildShield(ID id);
+    Comp BuildMogDrive(ID id);
 };

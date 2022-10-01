@@ -23,51 +23,16 @@ public:
 };
 
 
-class Comp {
-protected:
-    ID id;
-    str name;
-    str desc;
-    Crew crew;
-    double cur_health;
-    double max_health;
-    double mass;
-    double energy_req;
-    int layer;
-public:
-    Comp();
-    Comp(
-        ID _id,
-        str _name,
-        str _desc,
-        Crew _crew,
-        double _cur_health,
-        double _max_health,
-        double _mass,
-        double _energy_req
-    );
-    Comp(const Comp & c) = default;
-    Comp(Comp && c) = default;
-    Comp& operator=(const Comp & c) = default;
-    Comp& operator=(Comp && c) = default;
-    ID GetID() const;
-    str GetName() const;
-    str GetDesc() const;
-    Crew * GetCrew();
-    double GetCurHealth() const;
-    double GetMaxHealth() const;
-    double GetMass() const;
-    double GetEnergyReq() const;
-    int GetLayer() const;
-    void SetName(str n);
-    void SetDesc(str d);
-    void SetCrew(Crew c);
-    void SetCurHealth(double amt);
-    void SetMaxHealth(double amt);
-    void SetMass(double amt);
-    void SetEnergyReq(double amt);
-    void SetLayer(int l);
+enum class CompType {
+    Weapon,
+    Engine,
+    Shields,
+    Reactor,
+    MogDrive,
+
+    END
 };
+
 
 /* Engine Comp Class:
     Engines provide thrust. Thrust is the opposite of mass. 1 thrust will
@@ -75,22 +40,13 @@ public:
     sublight situations, like combat. They are not used to move ships between
     systems.
 */
-class Engine : public Comp {
+class Engine {
 private:
     double thrust;
 public:
     Engine();
     Engine(
-        ID _id,
-        str _name,
-        str _desc,
-        Crew _crew,
-        double _cur_health,
-        double _max_health,
-        double _mass,
-        double _energy_req,
         double _thrust
-        
     );
     Engine(const Engine & e) = default;
     Engine(Engine && e) = default;
@@ -113,7 +69,7 @@ public:
             penalties.
         - projectile_speed is how many kms the projectile travels in a turn.
 */
-class Weapon : public Comp {
+class Weapon {
 private:
     double damage;
     double target_speed;
@@ -123,14 +79,6 @@ private:
 public:
     Weapon();
     Weapon(
-        ID _id,
-        str _name,
-        str _desc,
-        Crew _crew,
-        double _cur_health,
-        double _max_health,
-        double _mass,
-        double _energy_req,
         double _damage,
         double _target_speed,
         double _rate_of_fire,
@@ -160,20 +108,12 @@ public:
     Leaky, in other words.
 */
 
-class Shields : public Comp {
+class Shields {
 private:
     double damage_reduction;
 public:
     Shields();
     Shields(
-        ID _id,
-        str _name,
-        str _desc,
-        Crew _crew,
-        double _cur_health,
-        double _max_health,
-        double _mass,
-        double _energy_req,
         double _damage_reduction
     );
     Shields(const Shields & s) = default;
@@ -204,7 +144,7 @@ public:
             end.
         
 */
-class MogDrive : public Comp {
+class MogDrive {
 private:
     double carry_mass;
     double carry_range;
@@ -212,14 +152,6 @@ private:
 public:
     MogDrive();
     MogDrive(
-        ID _id,
-        str _name,
-        str _desc,
-        Crew _crew,
-        double _cur_health,
-        double _max_health,
-        double _mass,
-        double _energy_req,
         double _carry_mass,
         double _carry_range,
         double _charge_time
@@ -238,21 +170,13 @@ public:
 
 /* Reactor Comp Class
 */
-class Reactor : public Comp {
+class Reactor {
 private:
     double energy_output;
     double fuel_req;
 public:
     Reactor();
     Reactor(
-        ID _id,
-        str _name,
-        str _desc,
-        Crew _crew,
-        double _cur_health,
-        double _max_health,
-        double _mass,
-        double _energy_req,
         double _energy_output,
         double _fuel_req
     );
@@ -265,3 +189,71 @@ public:
     void SetEnergyOutput(double amt);
     void SetFuelReq(double amt);
 };
+
+
+
+
+class Comp {
+protected:
+    ID id;
+    CompType type;
+    str name;
+    str desc;
+    Crew crew;
+    double cur_health;
+    double max_health;
+    double mass;
+    double energy_req;
+    int layer;
+    uptr<Engine> engine;
+    uptr<Weapon> weapon;
+    uptr<Shields> shields;
+    uptr<Reactor> reactor;
+    uptr<MogDrive> mogdrive;
+public:
+    Comp();
+    Comp(
+        ID _id,
+        CompType _type,
+        str _name,
+        str _desc,
+        Crew _crew,
+        double _cur_health,
+        double _max_health,
+        double _mass,
+        double _energy_req
+    );
+    Comp(const Comp & c) = default;
+    Comp(Comp && c) = default;
+    Comp& operator=(const Comp & c) = default;
+    Comp& operator=(Comp && c) = default;
+    ID GetID() const;
+    CompType GetCompType() const;
+    str GetName() const;
+    str GetDesc() const;
+    Crew * GetCrew();
+    double GetCurHealth() const;
+    double GetMaxHealth() const;
+    double GetMass() const;
+    double GetEnergyReq() const;
+    int GetLayer() const;
+    void SetName(str n);
+    void SetDesc(str d);
+    void SetCrew(Crew c);
+    void SetCurHealth(double amt);
+    void SetMaxHealth(double amt);
+    void SetMass(double amt);
+    void SetEnergyReq(double amt);
+    void SetLayer(int l);
+    Engine * GetEngine();
+    Weapon * GetWeapon();
+    Shields * GetShields();
+    Reactor * GetReactor();
+    MogDrive * GetMogDrive();
+    void SetEngine(uptr<Engine> c);
+    void SetWeapon(uptr<Weapon> c);
+    void SetShields(uptr<Shields> c);
+    void SetReactor(uptr<Reactor> c);
+    void SetMogDrive(uptr<MogDrive> c);
+};
+

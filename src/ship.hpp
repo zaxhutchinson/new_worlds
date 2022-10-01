@@ -9,11 +9,7 @@ private:
     ID id;
     str name;
     umap<int,ShipLayer> layers;
-    vec<Engine> engines;
-    vec<Weapon> weapons;
-    vec<Shields> shields;
-    vec<Reactor> reactors;
-    vec<MogDrive> mogdrives;
+    umap<CompType,vec<Comp>> comps;
 public:
     Ship();
     Ship(ID _id, str _name);
@@ -21,19 +17,16 @@ public:
     Ship(Ship && s) = default;
     Ship& operator=(const Ship & s) = default;
     Ship& operator=(Ship && s) = default;
+    void InitMaps();
     ID GetID() const;
     str GetName() const;
     ShipLayer * GetShipLayer(int i);
     umap<int,ShipLayer>& GetShipLayers();
-    vec<Engine> & GetEngines();
-    vec<Weapon> & GetWeapons();
-    vec<Shields> & GetShields();
-    vec<Reactor> & GetReactors();
-    vec<MogDrive> & GetMogDrives();
+    vec<Comp> * GetCompsOfType(CompType ct);
     void AddShipLayer(ShipLayer l);
-    void AddEngine(Engine e);
-    void AddWeapon(Weapon w);
-    void AddShields(Shields s);
-    void AddReactor(Reactor r);
-    void AddMogDrive(MogDrive m);
+    void AddComp(Comp c);
+
+    double GetTotalEnergyReq();
+    double GetTotalEnergyOutput();
+    double GetEnergyComsumptionRatio();
 };

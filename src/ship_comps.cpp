@@ -28,6 +28,7 @@ void Crew::SetXP(double amt) {
 Comp::Comp() {}
 Comp::Comp(
     ID _id,
+    CompType _type,
     str _name,
     str _desc,
     Crew _crew,
@@ -36,11 +37,12 @@ Comp::Comp(
     double _mass,
     double _energy_req
 )
-    : id(_id), name(_name), desc(_desc), crew(_crew), cur_health(_cur_health),
+    : id(_id), type(_type), name(_name), desc(_desc), crew(_crew), cur_health(_cur_health),
     max_health(_max_health), mass(_mass), energy_req(_energy_req), layer(0)
 {}
 
 ID Comp::GetID() const { return id; }
+CompType Comp::GetCompType() const { return type; }
 str Comp::GetName() const { return name; }
 str Comp::GetDesc() const { return desc; }
 Crew * Comp::GetCrew() { return &crew; }
@@ -71,27 +73,38 @@ void Comp::SetEnergyReq(double amt) {
 void Comp::SetLayer(int l) {
     layer = l;
 }
+Engine * Comp::GetEngine() { return engine.get(); }
+Weapon * Comp::GetWeapon() { return weapon.get(); }
+Shields * Comp::GetShields() { return shields.get(); }
+Reactor * Comp::GetReactor() { return reactor.get(); }
+MogDrive * Comp::GetMogDrive() { return mogdrive.get(); }
+void Comp::SetEngine(uptr<Engine> c) {
+    engine = std::move(c);
+}
+void Comp::SetWeapon(uptr<Weapon> c) {
+    weapon = std::move(c);
+}
+void Comp::SetShields(uptr<Shields> c) {
+    shields = std::move(c);
+}
+void Comp::SetReactor(uptr<Reactor> c) {
+    reactor = std::move(c);
+}
+void Comp::SetMogDrive(uptr<MogDrive> c) {
+    mogdrive = std::move(c);
+}
+
 
 
 /* ENGINE
 */
 Engine::Engine()
-    : Comp()
 {}
 
 Engine::Engine(
-    ID _id,
-    str _name,
-    str _desc,
-    Crew _crew,
-    double _cur_health,
-    double _max_health,
-    double _mass,
-    double _energy_req,
     double _thrust
 )
-    : Comp(_id, _name, _desc, _crew, _cur_health, _max_health, _mass, _energy_req),
-        thrust(_thrust)
+    : thrust(_thrust)
 {}
 double Engine::GetThrust() const {
     return thrust;
@@ -107,22 +120,13 @@ void Engine::SetThrust(double amt) {
 */
 Weapon::Weapon() {}
 Weapon::Weapon(
-    ID _id,
-    str _name,
-    str _desc,
-    Crew _crew,
-    double _cur_health,
-    double _max_health,
-    double _mass,
-    double _energy_req,
     double _damage,
     double _target_speed,
     double _rate_of_fire,
     double _range,
     double _projectile_speed
 )
-    : Comp(_id, _name, _desc, _crew, _cur_health, _max_health, _mass, _energy_req),
-        damage(_damage), target_speed(_target_speed), rate_of_fire(_rate_of_fire),
+    : damage(_damage), target_speed(_target_speed), rate_of_fire(_rate_of_fire),
         range(_range), projectile_speed(_projectile_speed)
 {}
 double Weapon::GetDamage() const { return damage; }
@@ -149,18 +153,9 @@ void Weapon::SetProjectileSpeed(double amt) { projectile_speed = amt; }
 
 Shields::Shields() {}
 Shields::Shields(
-    ID _id,
-    str _name,
-    str _desc,
-    Crew _crew,
-    double _cur_health,
-    double _max_health,
-    double _mass,
-    double _energy_req,
     double _damage_reduction
 )
-    : Comp(_id, _name, _desc, _crew, _cur_health, _max_health, _mass, _energy_req),
-        damage_reduction(_damage_reduction)
+    : damage_reduction(_damage_reduction)
 {}
 
 double Shields::GetDamageReduction() const { return damage_reduction; }
@@ -175,20 +170,11 @@ void Shields::SetDamageReduction(double amt) {
 */
 MogDrive::MogDrive() {}
 MogDrive::MogDrive(
-    ID _id,
-    str _name,
-    str _desc,
-    Crew _crew,
-    double _cur_health,
-    double _max_health,
-    double _mass,
-    double _energy_req,
     double _carry_mass,
     double _carry_range,
     double _charge_time
 )
-    : Comp(_id, _name, _desc, _crew, _cur_health, _max_health, _mass, _energy_req),
-        carry_mass(_carry_mass), carry_range(_carry_range),
+    : carry_mass(_carry_mass), carry_range(_carry_range),
         charge_time(_charge_time)
 {}
 double MogDrive::GetCarryMass() const { return carry_mass; }
@@ -209,19 +195,10 @@ void MogDrive::SetChargeTime(double amt) {
 */
 Reactor::Reactor() {}
 Reactor::Reactor(
-    ID _id,
-    str _name,
-    str _desc,
-    Crew _crew,
-    double _cur_health,
-    double _max_health,
-    double _mass,
-    double _energy_req,
     double _energy_output,
     double _fuel_req
 )
-    : Comp(_id, _name, _desc, _crew, _cur_health, _max_health, _mass, _energy_req),
-        energy_output(_energy_output), fuel_req(_fuel_req)
+    : energy_output(_energy_output), fuel_req(_fuel_req)
 {}
 double Reactor::GetEnergyOutput() const { return energy_output; }
 double Reactor::GetFuelReq() const { return fuel_req; }

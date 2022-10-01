@@ -18,8 +18,8 @@
         "weapons": [
             {
                 "layer":0,
-                "id":"point_defence",
-                "amt":10
+                "id":"railgun_1",
+                "amt":1
             }
         ],
         "shields": [
@@ -63,7 +63,7 @@
         "weapons": [
             {
                 "layer":0,
-                "id":"point_defence",
+                "id":"railgun_1",
                 "amt":10
             }
         ],

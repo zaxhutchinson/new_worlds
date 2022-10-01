@@ -4,8 +4,8 @@
         "desc": "An entry level engine. Not bad. Not great.",
         "crew_size": 10,
         "max_health": 100.0,
-        "mass": 1.0,
-        "energy_req":100,
+        "mass": 50.0,
+        "energy_req":50,
         "thrust": 100.0
     },
     "engine_2": {
@@ -13,8 +13,8 @@
         "desc": "An improved version of the entry level engine. A little better.",
         "crew_size": 10,
         "max_health": 100.0,
-        "mass": 1.0,
-        "energy_req":100,
+        "mass": 50.0,
+        "energy_req":50,
         "thrust": 120.0
     }
 }
