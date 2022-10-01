@@ -1,0 +1,20 @@
+{
+    "engine_1": {
+        "name": "Engine v1",
+        "desc": "An entry level engine. Not bad. Not great.",
+        "crew_size": 10,
+        "max_health": 100.0,
+        "mass": 1.0,
+        "energy_req":100,
+        "thrust": 100.0
+    },
+    "engine_2": {
+        "name": "Engine v2",
+        "desc": "An improved version of the entry level engine. A little better.",
+        "crew_size": 10,
+        "max_health": 100.0,
+        "mass": 1.0,
+        "energy_req":100,
+        "thrust": 120.0
+    }
+}

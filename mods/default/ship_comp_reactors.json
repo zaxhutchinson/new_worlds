@@ -1,0 +1,12 @@
+{
+    "reactor_1" : {
+        "name": "Reactor v1",
+        "desc": "An entry level reactor. Not bad. Not great.",
+        "crew_size": 10,
+        "max_health": 100.0,
+        "mass": 1.0,
+        "energy_req":0,
+        "energy_output":1000,
+        "fuel_req":100
+    }
+}

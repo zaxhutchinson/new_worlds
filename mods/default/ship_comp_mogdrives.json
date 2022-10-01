@@ -1,0 +1,13 @@
+{
+    "drive_1" : {
+        "name": "MOG Drive v1",
+        "desc": "An entry level drive. Not bad. Not great.",
+        "crew_size": 10,
+        "max_health": 100.0,
+        "mass": 1.0,
+        "energy_req":100,
+        "carry_mass": 10000,
+        "carry_range": 20,
+        "charge_time": 5
+    }
+}

@@ -18,8 +18,8 @@ uptr<Galaxy> BuildNewGalaxy(str modname) {
         Vec2i pos(coords[0],coords[1]);
         vec<double> res = it->at("resources");
         vec<double> inf = it->at("infrastructure");
+        vec<ID> conns = it->at("connections");
         double stability = it->at("stability");
-        double economy = it->at("economy");
 
         System s(
             id,
@@ -28,8 +28,8 @@ uptr<Galaxy> BuildNewGalaxy(str modname) {
             pos,
             res,
             inf,
-            stability,
-            economy
+            conns,
+            stability
         );
 
         galaxy->AddSystem(std::move(s));

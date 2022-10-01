@@ -1,0 +1,15 @@
+{
+    "point_defence": {
+        "name": "Point Defense",
+        "desc": "A point defense cannon designed to stop fighters.",
+        "crew_size": 4,
+        "max_health": 100.0,
+        "mass": 1.0,
+        "energy_req":10,
+        "damage": 1.0,
+        "target_speed": 100.0,
+        "rate_of_fire": 10.0,
+        "range": 10.0,
+        "projectile_speed": 10.0
+    }
+}

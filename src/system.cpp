@@ -6,7 +6,7 @@
 
 System::System() 
     : id(ID()), name("NONE"), desc("NONE"),
-        stability(0), economy(0.0)
+        stability(0)
 {
     for(sizet i = 0; i < static_cast<sizet>(ResType::END); i++) {
         resources.push_back(0);
@@ -21,12 +21,12 @@ System::System(
     Vec2i _position,
     vec<double> & _resources,
     vec<double> & _infrastructure,
-    double _stability,
-    double _economy
+    vec<ID> & _connections,
+    double _stability
 )
     : id(_id), name(_name), desc(_desc), position(_position),
         resources(_resources), infrastructure(_infrastructure),
-        stability(_stability), economy(_economy)
+        connections(_connections), stability(_stability)
 {}
 ID System::GetID() const { return id; }
 str System::GetName() const { return name; }
@@ -35,11 +35,11 @@ Vec2i System::GetPosition() const { return position; }
 double System::GetBaseResource(ResType t) const { 
     return resources[static_cast<int>(t)]; 
 }
-double System::GetEconomy() const { 
-    return economy; 
-}
 double System::GetInfrastructure(ResType t) const { 
     return infrastructure[static_cast<int>(t)]; 
+}
+vec<ID> & System::GetConnections() {
+    return connections;
 }
 double System::GetStability() const { return stability; }
 void System::InitLoyalty(vec<ID> & all_faction_ids) {
@@ -51,21 +51,9 @@ void System::InitLoyalty(vec<ID> & all_faction_ids) {
     }
 }
 
-double System::GetInfrastructureMultiplier(ResType t) const {
-    return static_cast<double>(GetInfrastructure(t)) / 
-        INFRASTRUCTURE_MULTIPLIER_BASE[static_cast<int>(t)];
-}
 
 double System::GetActualResource(ResType t) const {
-    return GetBaseResource(t) * GetInfrastructureMultiplier(t);
-}
-
-double System::CalculateTaxes() {
-    double taxes = 0.0;
-    for(sizet i = 0; i < static_cast<sizet>(ResType::END); i++) {
-        taxes += GetActualResource(static_cast<ResType>(i)) * GetEconomy();
-    }
-    return taxes;
+    return GetBaseResource(t) * GetInfrastructure(t);
 }
 
 void System::ChangeStability(double amt) {
@@ -74,15 +62,6 @@ void System::ChangeStability(double amt) {
         stability = 0;
     } else if(stability > MAX_STABILITY) {
         stability = MAX_STABILITY;
-    }
-}
-
-void System::ChangeEconomy(double amt) {
-    economy += amt;
-    if(economy < 0) {
-        economy = 0;
-    } else if(economy > MAX_ECONOMY) {
-        economy = MAX_ECONOMY;
     }
 }
 

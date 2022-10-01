@@ -1,0 +1,12 @@
+{
+    "basic_shields" : {
+        "name": "Basic Budget Shields",
+        "desc": "This is your basic budget, lowcost shield package.",
+        "crew_size": 4,
+        "max_health": 100.0,
+        "mass": 1.0,
+        "energy_req":100,
+        "damage_reduction": 20.0
+        
+    }
+}

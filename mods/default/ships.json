@@ -1,0 +1,92 @@
+{
+    "ship_1" : {
+        "name": "Ship One",
+        "layers" : [
+            {
+                "layer":0,
+                "health":1000,
+                "mass":1000
+            }
+        ],
+        "engines": [
+            {
+                "layer":0,
+                "id":"engine_1",
+                "amt":4
+            }
+        ],
+        "weapons": [
+            {
+                "layer":0,
+                "id":"point_defence",
+                "amt":10
+            }
+        ],
+        "shields": [
+            {
+                "layer":0,
+                "id":"basic_shields",
+                "amt":1
+            }
+        ],
+        "reactors": [
+            {
+                "layer":0,
+                "id":"reactor_1",
+                "amt":1
+            }
+        ],
+        "mogdrives": [
+            {
+                "layer":0,
+                "id":"drive_1",
+                "amt":1
+            }
+        ]
+    },
+    "ship_2" : {
+        "name": "Ship Two",
+        "layers" : [
+            {
+                "layer":0,
+                "health":1000,
+                "mass":1000
+            }
+        ],
+        "engines": [
+            {
+                "layer":0,
+                "id":"engine_1",
+                "amt":4
+            }
+        ],
+        "weapons": [
+            {
+                "layer":0,
+                "id":"point_defence",
+                "amt":10
+            }
+        ],
+        "shields": [
+            {
+                "layer":0,
+                "id":"basic_shields",
+                "amt":1
+            }
+        ],
+        "reactors": [
+            {
+                "layer":0,
+                "id":"reactor_1",
+                "amt":1
+            }
+        ],
+        "mogdrives": [
+            {
+                "layer":0,
+                "id":"drive_1",
+                "amt":1
+            }
+        ]
+    }
+}

@@ -35,3 +35,6 @@ Invest in two things:
 No economy
 
 Stablity scales extraction.
+
+Collect taxes:
+    population * infrastructure * stability * tax rate

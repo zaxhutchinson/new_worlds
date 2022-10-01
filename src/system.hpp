@@ -5,7 +5,6 @@
 
 enum class ResType {
     Population,
-    Capacity,
     Minerals,
     Fuel,
     END
@@ -14,14 +13,7 @@ enum class ResType {
 
 class System {
 private:
-    static constexpr double INFRASTRUCTURE_MULTIPLIER_BASE[4] = {
-        10.0,
-        10.0,
-        10.0,
-        10.0
-    };
     static constexpr double MAX_STABILITY = 100.0;
-    static constexpr double MAX_ECONOMY = 100.0;
     static constexpr double MAX_LOYALTY = 100.0;
 
     ID id;
@@ -30,9 +22,10 @@ private:
     Vec2i position;
     vec<double> resources;
     vec<double> infrastructure;
+    vec<ID> connections;
     double stability;
-    double economy;
     umap<ID,double> loyalty;
+    
 public:
     System();
     System(
@@ -42,8 +35,8 @@ public:
         Vec2i _position,
         vec<double> & _resources,
         vec<double> & _infrastructure,
-        double _stability,
-        double _economy
+        vec<ID> & _connections,
+        double _stability
     );
     System(const System & system) = default;
     System(System && system) = default;
@@ -54,19 +47,14 @@ public:
     str GetDesc() const;
     Vec2i GetPosition() const;
     double GetBaseResource(ResType t) const;
-    double GetEconomy() const;
     double GetInfrastructure(ResType t) const;
+    vec<ID> & GetConnections();
     double GetStability() const;
-   
     void InitLoyalty(vec<ID> & all_faction_ids);
 
-    double GetInfrastructureMultiplier(ResType t) const;
     double GetActualResource(ResType t) const;
 
-    double CalculateTaxes();
-
     void ChangeStability(double amt);
-    void ChangeEconomy(double amt);
     void ChangeLoyalty(ID id, double amt);
 
 };
