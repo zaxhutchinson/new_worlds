@@ -26,6 +26,9 @@ public:
     void AddShipLayer(ShipLayer l);
     void AddComp(Comp c);
 
+    // Crew Methods
+    void CalculateCrewEffectiveness(RNG * rng);
+
     double GetTotalEnergyReq();
     double GetTotalEnergyOutput();
     double GetEnergyComsumptionRatio();

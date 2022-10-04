@@ -7,9 +7,10 @@ private:
     int cur_crew;
     int max_crew;
     double xp;
+    double crew_effectiveness;
 public:
     Crew();
-    Crew(int _max_crew, int _xp=0);
+    Crew(int _max_crew, int _xp=75);
     Crew(const Crew & c) = default;
     Crew(Crew && c) = default;
     Crew& operator=(const Crew & c) = default;
@@ -17,9 +18,13 @@ public:
     int GetCurCrew() const;
     int GetMaxCrew() const;
     double GetXP() const;
+    double GetCrewEffectiveness() const;
     void SetCurCrew(int amt);
     void SetMaxCrew(int amt);
-    void SetXP(double amt); 
+    void SetXP(double amt);
+
+    double GetXPAsPercent() const;
+    double CalculateCrewEffectiveness(RNG * rng) const;
 };
 
 
@@ -255,5 +260,28 @@ public:
     void SetShields(uptr<Shields> c);
     void SetReactor(uptr<Reactor> c);
     void SetMogDrive(uptr<MogDrive> c);
+
+    // ENGINE METHODS
+    double GetThrust() const;
+
+    // WEAPON METHODS
+    double GetDamage() const;
+    double GetTargetSpeed() const;
+    double GetRateOfFire() const;
+    double GetRange() const;
+    double GetProjectileSpeed() const;
+
+    // SHIELDS METHODS
+    double GetDamageReduction() const;
+
+    // REACTOR METHODS
+    double GetEnergyOutput() const;
+    double GetFuelReq() const;
+
+    // MOGDRIVE METHODS
+    double GetCarryMass() const;
+    double GetCarryRange() const;
+    double GetChargeTime() const;
+
 };
 

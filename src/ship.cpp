@@ -29,6 +29,24 @@ void Ship::AddComp(Comp c) {
     comps.at(ct).push_back(std::move(c));
 }
 
+
+// Crew Methods
+void Ship::CalculateCrewEffectiveness(RNG * rng) {
+    for(
+        umap<CompType,vec<Comp>>::iterator it = comps.begin();
+        it != comps.end(); it++
+    ) {
+        for(
+            vec<Comp>::iterator cit = it->second.begin();
+            cit != it->second.end(); cit++
+        ) {
+            cit->GetCrew()->CalculateCrewEffectiveness(rng);
+        }
+    }
+}
+
+
+
 double Ship::GetTotalEnergyReq() {
     double energy_req_total = 0.0;
     for(

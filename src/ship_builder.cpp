@@ -91,9 +91,10 @@ void ShipBuilder::LoadMogDriveTemplates(str modname) {
     }
 }
 
-Ship ShipBuilder::BuildShip(ID id) {
+Ship ShipBuilder::BuildShip(ShipSpec ss, RNG * rng) {
 
-    
+    ID id = ss.ship_id;
+    std::uniform_int_distribution<int> xpDist(ss.min_xp, ss.max_xp);
 
     nlohmann::json j = ship_templates.at(id);
 
@@ -129,6 +130,7 @@ Ship ShipBuilder::BuildShip(ID id) {
         int amt = it->at("amt");
         for(int i = 0; i < amt; i++) {
             Comp e = BuildEngine(cid);
+            e.GetCrew()->SetXP(xpDist(*rng));
             e.SetLayer(layer_num);
             ship.AddComp(std::move(e));
         }
@@ -144,6 +146,7 @@ Ship ShipBuilder::BuildShip(ID id) {
         int amt = it->at("amt");
         for(int i = 0; i < amt; i++) {
             Comp w = BuildWeapon(cid);
+            w.GetCrew()->SetXP(xpDist(*rng));
             w.SetLayer(layer_num);
             ship.AddComp(std::move(w));
         }
@@ -159,6 +162,7 @@ Ship ShipBuilder::BuildShip(ID id) {
         int amt = it->at("amt");
         for(int i = 0; i < amt; i++) {
             Comp r = BuildReactor(cid);
+            r.GetCrew()->SetXP(xpDist(*rng));
             r.SetLayer(layer_num);
             ship.AddComp(std::move(r));
         }
@@ -174,6 +178,7 @@ Ship ShipBuilder::BuildShip(ID id) {
         int amt = it->at("amt");
         for(int i = 0; i < amt; i++) {
             Comp s = BuildShield(cid);
+            s.GetCrew()->SetXP(xpDist(*rng));
             s.SetLayer(layer_num);
             ship.AddComp(std::move(s));
         }
@@ -189,6 +194,7 @@ Ship ShipBuilder::BuildShip(ID id) {
         int amt = it->at("amt");
         for(int i = 0; i < amt; i++) {
             Comp m = BuildMogDrive(cid);
+            m.GetCrew()->SetXP(xpDist(*rng));
             m.SetLayer(layer_num);
             ship.AddComp(std::move(m));
         }

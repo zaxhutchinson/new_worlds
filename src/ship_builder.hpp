@@ -8,6 +8,13 @@
 
 #include"json.hpp"
 
+struct ShipSpec {
+    ID ship_id;
+    int min_xp;
+    int max_xp;
+};
+
+
 class ShipBuilder {
 private:
     umap<ID,nlohmann::json> engine_templates;
@@ -28,7 +35,7 @@ public:
     void LoadShieldTemplates(str modname);
     void LoadMogDriveTemplates(str modname);
 
-    Ship BuildShip(ID id);
+    Ship BuildShip(ShipSpec ss, RNG * rng);
 
     Comp BuildComp(ID id, CompType ct, nlohmann::json j);
 

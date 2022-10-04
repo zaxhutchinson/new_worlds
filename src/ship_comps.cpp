@@ -3,10 +3,15 @@
 Crew::Crew() {}
 Crew::Crew(int _max_crew, int _xp)
     : cur_crew(_max_crew), max_crew(_max_crew), xp(_xp)
-{}
+{
+    crew_effectiveness = 
+        (static_cast<double>(cur_crew) / static_cast<double>(max_crew)) *
+        GetXPAsPercent();
+}
 int Crew::GetCurCrew() const { return cur_crew; }
 int Crew::GetMaxCrew() const { return max_crew; }
 double Crew::GetXP() const { return xp; }
+double Crew::GetCrewEffectiveness() const { return crew_effectiveness; }
 void Crew::SetCurCrew(int amt) {
     cur_crew = amt;
     if(cur_crew < 0) cur_crew = 0;
@@ -19,7 +24,16 @@ void Crew::SetMaxCrew(int amt) {
 void Crew::SetXP(double amt) {
     xp = amt;
 }
+double Crew::GetXPAsPercent() const {
+    return xp / 100.0;
+}
+double Crew::CalculateCrewEffectiveness(RNG * rng) const {
 
+    std::uniform_real_distribution<double> crewDist(cur_crew,max_crew);
+    double able_to_fulfill_role = crewDist(*rng) / static_cast<double>(max_crew);
+    return able_to_fulfill_role * GetXPAsPercent();
+
+}
 
 
 
@@ -41,58 +55,7 @@ Comp::Comp(
     max_health(_max_health), mass(_mass), energy_req(_energy_req), layer(0)
 {}
 
-ID Comp::GetID() const { return id; }
-CompType Comp::GetCompType() const { return type; }
-str Comp::GetName() const { return name; }
-str Comp::GetDesc() const { return desc; }
-Crew * Comp::GetCrew() { return &crew; }
-double Comp::GetCurHealth() const { return cur_health; }
-double Comp::GetMaxHealth() const { return max_health; }
-double Comp::GetMass() const { return mass; }
-double Comp::GetEnergyReq() const { return energy_req; }
-int Comp::GetLayer() const { return layer; }
-void Comp::SetName(str n) { name = n; }
-void Comp::SetDesc(str d) { desc = d; }
-void Comp::SetCrew(Crew c) { crew = c; }
-void Comp::SetCurHealth(double amt) {
-    cur_health = amt;
-    if(cur_health < 0) cur_health = 0;
-    else if(cur_health > max_health) cur_health = max_health;
-}
-void Comp::SetMaxHealth(double amt) {
-    max_health = amt;
-    if(max_health < 0) max_health = 0;
-}
-void Comp::SetMass(double amt) {
-    mass = amt;
-    if(mass < 0) mass = 0;
-}
-void Comp::SetEnergyReq(double amt) {
-    energy_req = amt;
-}
-void Comp::SetLayer(int l) {
-    layer = l;
-}
-Engine * Comp::GetEngine() { return engine.get(); }
-Weapon * Comp::GetWeapon() { return weapon.get(); }
-Shields * Comp::GetShields() { return shields.get(); }
-Reactor * Comp::GetReactor() { return reactor.get(); }
-MogDrive * Comp::GetMogDrive() { return mogdrive.get(); }
-void Comp::SetEngine(uptr<Engine> c) {
-    engine = std::move(c);
-}
-void Comp::SetWeapon(uptr<Weapon> c) {
-    weapon = std::move(c);
-}
-void Comp::SetShields(uptr<Shields> c) {
-    shields = std::move(c);
-}
-void Comp::SetReactor(uptr<Reactor> c) {
-    reactor = std::move(c);
-}
-void Comp::SetMogDrive(uptr<MogDrive> c) {
-    mogdrive = std::move(c);
-}
+
 
 
 
@@ -113,7 +76,6 @@ void Engine::SetThrust(double amt) {
     thrust = amt;
     if(thrust < 0) thrust = 0;
 }
-
 
 
 /* WEAPON
@@ -207,4 +169,157 @@ void Reactor::SetEnergyOutput(double amt) {
 }
 void Reactor::SetFuelReq(double amt) {
     fuel_req = amt;
+}
+
+
+
+
+
+/* COMP
+*/
+ID Comp::GetID() const { return id; }
+CompType Comp::GetCompType() const { return type; }
+str Comp::GetName() const { return name; }
+str Comp::GetDesc() const { return desc; }
+Crew * Comp::GetCrew() { return &crew; }
+double Comp::GetCurHealth() const { return cur_health; }
+double Comp::GetMaxHealth() const { return max_health; }
+double Comp::GetMass() const { return mass; }
+double Comp::GetEnergyReq() const { return energy_req; }
+int Comp::GetLayer() const { return layer; }
+void Comp::SetName(str n) { name = n; }
+void Comp::SetDesc(str d) { desc = d; }
+void Comp::SetCrew(Crew c) { crew = c; }
+void Comp::SetCurHealth(double amt) {
+    cur_health = amt;
+    if(cur_health < 0) cur_health = 0;
+    else if(cur_health > max_health) cur_health = max_health;
+}
+void Comp::SetMaxHealth(double amt) {
+    max_health = amt;
+    if(max_health < 0) max_health = 0;
+}
+void Comp::SetMass(double amt) {
+    mass = amt;
+    if(mass < 0) mass = 0;
+}
+void Comp::SetEnergyReq(double amt) {
+    energy_req = amt;
+}
+void Comp::SetLayer(int l) {
+    layer = l;
+}
+Engine * Comp::GetEngine() { return engine.get(); }
+Weapon * Comp::GetWeapon() { return weapon.get(); }
+Shields * Comp::GetShields() { return shields.get(); }
+Reactor * Comp::GetReactor() { return reactor.get(); }
+MogDrive * Comp::GetMogDrive() { return mogdrive.get(); }
+void Comp::SetEngine(uptr<Engine> c) {
+    engine = std::move(c);
+}
+void Comp::SetWeapon(uptr<Weapon> c) {
+    weapon = std::move(c);
+}
+void Comp::SetShields(uptr<Shields> c) {
+    shields = std::move(c);
+}
+void Comp::SetReactor(uptr<Reactor> c) {
+    reactor = std::move(c);
+}
+void Comp::SetMogDrive(uptr<MogDrive> c) {
+    mogdrive = std::move(c);
+}
+
+// Engine Methods
+double Comp::GetThrust() const {
+    if(engine) {
+        return crew.GetCrewEffectiveness() * engine->GetThrust();
+    } else {
+        return 0.0;
+    }
+}
+
+// Weapon Methods
+double Comp::GetDamage() const {
+    if(weapon) {
+        return crew.GetCrewEffectiveness() * weapon->GetDamage();
+    } else {
+        return 0.0;
+    }
+}
+double Comp::GetTargetSpeed() const {
+    if(weapon) {
+        return crew.GetCrewEffectiveness() * weapon->GetTargetSpeed();
+    } else {
+        return 0.0;
+    }
+}
+double Comp::GetRateOfFire() const {
+    if(weapon) {
+        return crew.GetCrewEffectiveness() * weapon->GetRateOfFire();
+    } else {
+        return 0.0;
+    }
+}
+double Comp::GetRange() const {
+    if(weapon) {
+        return weapon->GetRange();
+    } else {
+        return 0.0;
+    }
+}
+double Comp::GetProjectileSpeed() const {
+    if(weapon) {
+        return weapon->GetProjectileSpeed();
+    } else {
+        return 0.0;
+    }
+}
+
+// Shields Methods
+double Comp::GetDamageReduction() const {
+    if(shields) {
+        return crew.GetCrewEffectiveness() * shields->GetDamageReduction();
+    } else {
+        return 0.0;
+    }
+}
+
+// Reactor Methods
+double Comp::GetEnergyOutput() const {
+    if(reactor) {
+        return crew.GetCrewEffectiveness() * reactor->GetEnergyOutput();
+    } else {
+        return 0.0;
+    }
+}
+double Comp::GetFuelReq() const {
+    if(reactor) {
+        return crew.GetCrewEffectiveness() * reactor->GetFuelReq();
+    } else {
+        return 0.0;
+    }
+}
+
+// MogDrive
+double Comp::GetCarryMass() const {
+    if(mogdrive) {
+        return crew.GetCrewEffectiveness() * mogdrive->GetCarryMass();
+    } else {
+        return 0.0;
+    }
+}
+double Comp::GetCarryRange() const {
+    if(mogdrive) {
+        return crew.GetCrewEffectiveness() * mogdrive->GetCarryRange();
+    } else {
+        return 0.0;
+    }
+}
+double Comp::GetChargeTime() const {
+    if(mogdrive) {
+        return crew.GetCrewEffectiveness() * mogdrive->GetChargeTime();
+    } else {
+        return 0.0;
+    }
 }
