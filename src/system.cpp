@@ -21,12 +21,11 @@ System::System(
     Vec2i _position,
     vec<double> & _resources,
     vec<double> & _infrastructure,
-    vec<ID> & _connections,
     double _stability
 )
     : id(_id), name(_name), desc(_desc), position(_position),
         resources(_resources), infrastructure(_infrastructure),
-        connections(_connections), stability(_stability)
+        stability(_stability)
 {}
 ID System::GetID() const { return id; }
 str System::GetName() const { return name; }
@@ -37,9 +36,6 @@ double System::GetBaseResource(ResType t) const {
 }
 double System::GetInfrastructure(ResType t) const { 
     return infrastructure[static_cast<int>(t)]; 
-}
-vec<ID> & System::GetConnections() {
-    return connections;
 }
 double System::GetStability() const { return stability; }
 void System::InitLoyalty(vec<ID> & all_faction_ids) {

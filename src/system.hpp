@@ -35,7 +35,6 @@ public:
         Vec2i _position,
         vec<double> & _resources,
         vec<double> & _infrastructure,
-        vec<ID> & _connections,
         double _stability
     );
     System(const System & system) = default;
@@ -48,7 +47,6 @@ public:
     Vec2i GetPosition() const;
     double GetBaseResource(ResType t) const;
     double GetInfrastructure(ResType t) const;
-    vec<ID> & GetConnections();
     double GetStability() const;
     void InitLoyalty(vec<ID> & all_faction_ids);
 
