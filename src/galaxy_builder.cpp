@@ -28,7 +28,6 @@ uptr<Galaxy> BuildNewGalaxy(str modname) {
             pos,
             res,
             inf,
-            conns,
             stability
         );
 

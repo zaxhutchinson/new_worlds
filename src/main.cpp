@@ -3,7 +3,7 @@
 #include"galaxy_builder.hpp"
 #include"ship_builder.hpp"
 #include"fleet.hpp"
-
+#include"facility.hpp"
 int main(int argc, char** argv) {
 
     std::random_device rd;
@@ -42,6 +42,17 @@ int main(int argc, char** argv) {
         std::cout << s1->GetName() << std::endl;
     else
         std::cout << "Not a valid ship\n";
+
+    str s = "id_1";
+    vec<double> d = {10,7};
+    FacAbility fa(
+        s,
+        FacAbilityType::ShipConstruction,
+        d,
+        1000
+    );
+
+    std::cout << fa.GetFacAbilityTypeAsString() << std::endl;
 
     // std::cout << shipA.GetID() << " " << shipB.GetID() << std::endl;
     // shipA.CalculateCrewEffectiveness(&rng);

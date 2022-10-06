@@ -53,6 +53,7 @@ template<typename T>
 using lst = std::list<T>;
 template<typename T>
 using luptr = lst<uptr<T>>;
+using strv = std::string_view;
 
 using i8 = int8_t;
 using i16 = int16_t;
