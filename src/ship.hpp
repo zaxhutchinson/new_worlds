@@ -17,6 +17,7 @@ public:
     Ship(Ship && s) = default;
     Ship& operator=(const Ship & s) = default;
     Ship& operator=(Ship && s) = default;
+    bool operator==(const Ship & s);
     void InitMaps();
     ID GetID() const;
     str GetName() const;
@@ -25,6 +26,7 @@ public:
     vec<Comp> * GetCompsOfType(CompType ct);
     void AddShipLayer(ShipLayer l);
     void AddComp(Comp c);
+    
 
     // Crew Methods
     void CalculateCrewEffectiveness(RNG * rng);

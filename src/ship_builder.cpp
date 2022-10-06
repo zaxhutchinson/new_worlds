@@ -1,6 +1,9 @@
 #include"ship_builder.hpp"
 
-ShipBuilder::ShipBuilder() {}
+ShipBuilder::ShipBuilder() {
+    std::random_device rd;
+    rng = RNG(rd());
+}
 
 void ShipBuilder::LoadTemplates(str modname) {
     LoadShipTemplates(modname);
@@ -23,6 +26,7 @@ void ShipBuilder::LoadShipTemplates(str modname) {
         str id = it.key();
         nlohmann::json temp = it.value();
         ship_templates.emplace(id, temp);
+        ship_count.emplace(id,0);
     }
 }
 void ShipBuilder::LoadWeaponTemplates(str modname) {
@@ -91,16 +95,24 @@ void ShipBuilder::LoadMogDriveTemplates(str modname) {
     }
 }
 
-Ship ShipBuilder::BuildShip(ShipSpec ss, RNG * rng) {
+i64 ShipBuilder::GetNextShipCount(ID id) {
+    i64 next_id = ship_count.at(id);
+    ship_count.insert_or_assign(id, next_id+1);
+    return next_id;
+}
 
-    ID id = ss.ship_id;
+uptr<Ship> ShipBuilder::BuildShip(ShipSpec ss) {
+
     std::uniform_int_distribution<int> xpDist(ss.min_xp, ss.max_xp);
 
-    nlohmann::json j = ship_templates.at(id);
+    nlohmann::json j = ship_templates.at(ss.ship_id);
+
+    i64 count = GetNextShipCount(ss.ship_id);
+    ID id = ss.ship_id+"_"+std::to_string(count);
 
     str name = j.at("name");
 
-    Ship ship(id,name);
+    uptr<Ship> ship = std::make_unique<Ship>(id,name);
 
     vec<nlohmann::json> layer_temps = j.at("layers");
     vec<nlohmann::json> engine_temps = j.at("engines");
@@ -117,7 +129,7 @@ Ship ShipBuilder::BuildShip(ShipSpec ss, RNG * rng) {
         int layer_num = it->at("layer");
         double layer_health = it->at("health");
         double layer_mass = it->at("mass");
-        ship.AddShipLayer(ShipLayer(layer_num, layer_mass, layer_health));
+        ship->AddShipLayer(ShipLayer(layer_num, layer_mass, layer_health));
     }
 
     // Add Engines
@@ -130,9 +142,9 @@ Ship ShipBuilder::BuildShip(ShipSpec ss, RNG * rng) {
         int amt = it->at("amt");
         for(int i = 0; i < amt; i++) {
             Comp e = BuildEngine(cid);
-            e.GetCrew()->SetXP(xpDist(*rng));
+            e.GetCrew()->SetXP(xpDist(rng));
             e.SetLayer(layer_num);
-            ship.AddComp(std::move(e));
+            ship->AddComp(std::move(e));
         }
     }
 
@@ -146,9 +158,9 @@ Ship ShipBuilder::BuildShip(ShipSpec ss, RNG * rng) {
         int amt = it->at("amt");
         for(int i = 0; i < amt; i++) {
             Comp w = BuildWeapon(cid);
-            w.GetCrew()->SetXP(xpDist(*rng));
+            w.GetCrew()->SetXP(xpDist(rng));
             w.SetLayer(layer_num);
-            ship.AddComp(std::move(w));
+            ship->AddComp(std::move(w));
         }
     }
 
@@ -162,9 +174,9 @@ Ship ShipBuilder::BuildShip(ShipSpec ss, RNG * rng) {
         int amt = it->at("amt");
         for(int i = 0; i < amt; i++) {
             Comp r = BuildReactor(cid);
-            r.GetCrew()->SetXP(xpDist(*rng));
+            r.GetCrew()->SetXP(xpDist(rng));
             r.SetLayer(layer_num);
-            ship.AddComp(std::move(r));
+            ship->AddComp(std::move(r));
         }
     }
 
@@ -178,9 +190,9 @@ Ship ShipBuilder::BuildShip(ShipSpec ss, RNG * rng) {
         int amt = it->at("amt");
         for(int i = 0; i < amt; i++) {
             Comp s = BuildShield(cid);
-            s.GetCrew()->SetXP(xpDist(*rng));
+            s.GetCrew()->SetXP(xpDist(rng));
             s.SetLayer(layer_num);
-            ship.AddComp(std::move(s));
+            ship->AddComp(std::move(s));
         }
     }
 
@@ -194,9 +206,9 @@ Ship ShipBuilder::BuildShip(ShipSpec ss, RNG * rng) {
         int amt = it->at("amt");
         for(int i = 0; i < amt; i++) {
             Comp m = BuildMogDrive(cid);
-            m.GetCrew()->SetXP(xpDist(*rng));
+            m.GetCrew()->SetXP(xpDist(rng));
             m.SetLayer(layer_num);
-            ship.AddComp(std::move(m));
+            ship->AddComp(std::move(m));
         }
     }
 

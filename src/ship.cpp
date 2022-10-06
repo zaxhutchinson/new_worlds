@@ -11,6 +11,9 @@ Ship::Ship(ID _id, str _name)
 {
     InitMaps();
 }
+bool Ship::operator==(const Ship & s) {
+    return id==s.id;
+}
 void Ship::InitMaps() {
     for(int i = 0; i < static_cast<int>(CompType::END); i++) {
         comps.emplace(static_cast<CompType>(i), vec<Comp>());
@@ -44,8 +47,6 @@ void Ship::CalculateCrewEffectiveness(RNG * rng) {
         }
     }
 }
-
-
 
 double Ship::GetTotalEnergyReq() {
     double energy_req_total = 0.0;

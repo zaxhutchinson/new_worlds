@@ -12,6 +12,7 @@
 #include<queue>
 #include<variant>
 #include<optional>
+#include<list>
 
 #define FMT_HEADER_ONLY
 #include<fmt/core.h>
@@ -48,6 +49,10 @@ template<typename T>
 using opt = std::optional<T>;
 template<typename T>
 using vopt = vec<opt<T>>;
+template<typename T>
+using lst = std::list<T>;
+template<typename T>
+using luptr = lst<uptr<T>>;
 
 using i8 = int8_t;
 using i16 = int16_t;

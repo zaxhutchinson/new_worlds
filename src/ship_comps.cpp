@@ -18,7 +18,7 @@ void Crew::SetCurCrew(int amt) {
     else if(cur_crew > max_crew) cur_crew = max_crew;
 }
 void Crew::SetMaxCrew(int amt) {
-    max_crew = max_crew;
+    max_crew = amt;
     if(max_crew < 0) max_crew = 0;
 }
 void Crew::SetXP(double amt) {
@@ -37,23 +37,7 @@ double Crew::CalculateCrewEffectiveness(RNG * rng) const {
 
 
 
-/* COMP
-*/
-Comp::Comp() {}
-Comp::Comp(
-    ID _id,
-    CompType _type,
-    str _name,
-    str _desc,
-    Crew _crew,
-    double _cur_health,
-    double _max_health,
-    double _mass,
-    double _energy_req
-)
-    : id(_id), type(_type), name(_name), desc(_desc), crew(_crew), cur_health(_cur_health),
-    max_health(_max_health), mass(_mass), energy_req(_energy_req), layer(0)
-{}
+
 
 
 
@@ -177,6 +161,26 @@ void Reactor::SetFuelReq(double amt) {
 
 /* COMP
 */
+Comp::Comp() 
+    : id(ID()), type(CompType::END), name("NONE"), desc("NONE"), crew(Crew()), cur_health(0),
+        max_health(0), mass(0), energy_req(0), layer(0),
+        engine(nullptr), weapon(nullptr), shields(nullptr), reactor(nullptr), mogdrive(nullptr)
+{}
+Comp::Comp(
+    ID _id,
+    CompType _type,
+    str _name,
+    str _desc,
+    Crew _crew,
+    double _cur_health,
+    double _max_health,
+    double _mass,
+    double _energy_req
+)
+    : id(_id), type(_type), name(_name), desc(_desc), crew(_crew), cur_health(_cur_health),
+        max_health(_max_health), mass(_mass), energy_req(_energy_req), layer(0),
+        engine(nullptr), weapon(nullptr), shields(nullptr), reactor(nullptr), mogdrive(nullptr)
+{}
 ID Comp::GetID() const { return id; }
 CompType Comp::GetCompType() const { return type; }
 str Comp::GetName() const { return name; }
@@ -228,6 +232,16 @@ void Comp::SetReactor(uptr<Reactor> c) {
 }
 void Comp::SetMogDrive(uptr<MogDrive> c) {
     mogdrive = std::move(c);
+}
+bool Comp::HasCompType(CompType ct) {
+    switch(ct) {
+        case CompType::Engine: return engine!=nullptr;
+        case CompType::Weapon: return weapon!=nullptr;
+        case CompType::Shields: return shields!=nullptr;
+        case CompType::Reactor: return reactor!=nullptr;
+        case CompType::MogDrive: return mogdrive!=nullptr;
+        default: return false;
+    }
 }
 
 // Engine Methods

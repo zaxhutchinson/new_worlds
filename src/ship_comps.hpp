@@ -228,9 +228,7 @@ public:
         double _mass,
         double _energy_req
     );
-    Comp(const Comp & c) = default;
     Comp(Comp && c) = default;
-    Comp& operator=(const Comp & c) = default;
     Comp& operator=(Comp && c) = default;
     ID GetID() const;
     CompType GetCompType() const;
@@ -260,6 +258,7 @@ public:
     void SetShields(uptr<Shields> c);
     void SetReactor(uptr<Reactor> c);
     void SetMogDrive(uptr<MogDrive> c);
+    bool HasCompType(CompType ct);
 
     // ENGINE METHODS
     double GetThrust() const;

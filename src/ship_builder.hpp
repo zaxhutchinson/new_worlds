@@ -17,12 +17,17 @@ struct ShipSpec {
 
 class ShipBuilder {
 private:
+
+    RNG rng;
+
     umap<ID,nlohmann::json> engine_templates;
     umap<ID,nlohmann::json> weapon_templates;
     umap<ID,nlohmann::json> reactor_templates;
     umap<ID,nlohmann::json> shield_templates;
     umap<ID,nlohmann::json> mogdrive_templates;
     umap<ID,nlohmann::json> ship_templates;
+
+    umap<ID,i64> ship_count;
 
 public:
     ShipBuilder();
@@ -35,7 +40,9 @@ public:
     void LoadShieldTemplates(str modname);
     void LoadMogDriveTemplates(str modname);
 
-    Ship BuildShip(ShipSpec ss, RNG * rng);
+    i64 GetNextShipCount(ID id);
+
+    uptr<Ship> BuildShip(ShipSpec ss);
 
     Comp BuildComp(ID id, CompType ct, nlohmann::json j);
 
