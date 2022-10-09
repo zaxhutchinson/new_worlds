@@ -1,15 +1,9 @@
 #pragma once
 
 #include"zxlb.hpp"
+#include"enums.hpp"
 #include"vec2i.hpp"
 #include"facility.hpp"
-
-enum class ResType {
-    Population,
-    Minerals,
-    Fuel,
-    END
-};
 
 
 class System {
@@ -23,7 +17,6 @@ private:
     Vec2i position;
     vec<double> resources;
     vec<double> infrastructure;
-    vec<ID> connections;
     double stability;
     umap<ID,double> loyalty;
     vec<Facility> facilities;
@@ -50,7 +43,6 @@ public:
     double GetInfrastructure(ResType t) const;
     double GetStability() const;
     vec<Facility> & GetFacilities();
-    vec<Facility*> GetFacilitiesWithAbility(FacAbilityType fat);
     void InitLoyalty(vec<ID> & all_faction_ids);
     void AddFacility(Facility facility);
 

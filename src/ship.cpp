@@ -6,8 +6,8 @@ Ship::Ship()
     InitMaps();
 }
 
-Ship::Ship(ID _id, str _name)
-    : id(_id), name(_name)
+Ship::Ship(ID _id, str _name, int _ship_class)
+    : id(_id), name(_name), ship_class(_ship_class)
 {
     InitMaps();
 }
@@ -21,6 +21,7 @@ void Ship::InitMaps() {
 }
 ID Ship::GetID() const { return id; }
 str Ship::GetName() const { return name; }
+int Ship::GetShipClass() const { return ship_class; }
 ShipLayer * Ship::GetShipLayer(int i) { return &(layers.at(i)); }
 umap<int,ShipLayer>& Ship::GetShipLayers() { return layers; }
 vec<Comp> * Ship::GetCompsOfType(CompType ct) { return &(comps.at(ct)); }

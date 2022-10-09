@@ -8,11 +8,12 @@ class Ship {
 private:
     ID id;
     str name;
+    int ship_class;
     umap<int,ShipLayer> layers;
     umap<CompType,vec<Comp>> comps;
 public:
     Ship();
-    Ship(ID _id, str _name);
+    Ship(ID _id, str _name, int _ship_class);
     Ship(const Ship & s) = default;
     Ship(Ship && s) = default;
     Ship& operator=(const Ship & s) = default;
@@ -21,6 +22,7 @@ public:
     void InitMaps();
     ID GetID() const;
     str GetName() const;
+    int GetShipClass() const;
     ShipLayer * GetShipLayer(int i);
     umap<int,ShipLayer>& GetShipLayers();
     vec<Comp> * GetCompsOfType(CompType ct);

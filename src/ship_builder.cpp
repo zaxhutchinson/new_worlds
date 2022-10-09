@@ -111,8 +111,9 @@ uptr<Ship> ShipBuilder::BuildShip(ShipSpec ss) {
     ID id = ss.ship_id+"_"+std::to_string(count);
 
     str name = j.at("name");
+    int ship_class  = j.at("class");
 
-    uptr<Ship> ship = std::make_unique<Ship>(id,name);
+    uptr<Ship> ship = std::make_unique<Ship>(id,name,ship_class);
 
     vec<nlohmann::json> layer_temps = j.at("layers");
     vec<nlohmann::json> engine_temps = j.at("engines");
@@ -220,6 +221,7 @@ Comp ShipBuilder::BuildComp(ID id, CompType ct, nlohmann::json j) {
 
     str name = j.at("name");
     str desc = j.at("desc");
+    vec<double> costs = j.at("costs");
     int crew_size = j.at("crew_size");
     double max_health = j.at("max_health");
     double mass = j.at("mass");
@@ -227,7 +229,7 @@ Comp ShipBuilder::BuildComp(ID id, CompType ct, nlohmann::json j) {
 
     Crew crew(crew_size);
 
-    Comp comp(id, ct, name, desc, crew, max_health, max_health,
+    Comp comp(id, ct, name, desc, costs, crew, max_health, max_health,
         mass, energy_req);
 
     return comp;

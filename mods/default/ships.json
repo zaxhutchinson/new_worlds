@@ -1,6 +1,7 @@
 {
     "ship_1" : {
         "name": "Ship One",
+        "class": 1,
         "layers" : [
             {
                 "layer":0,
@@ -46,6 +47,7 @@
     },
     "ship_2" : {
         "name": "Ship Two",
+        "class": 1,
         "layers" : [
             {
                 "layer":0,

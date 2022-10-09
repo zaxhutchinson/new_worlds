@@ -1,35 +1,63 @@
 #pragma once
 
 #include"zxlb.hpp"
-#include"magic_enum.hpp"
-enum class FacAbilityType {
-    ShipConstruction,
-    ArmyTraining,
-    Mining,
-    Extraction,
-    Recruitment,
-    END
+#include"enums.hpp"
+
+
+class FacConstruction {
+private:
+    vec<ShipClass> ship_classes;
+    vec<UnitClass> unit_classes;
+    vec<double> reses_per_tick;
+public:
+    FacConstruction();
+    FacConstruction(
+        vec<ShipClass> _ship_classes,
+        vec<UnitClass> _unit_classes,
+        vec<double> _reses_per_tick
+    );
+    FacConstruction(const FacConstruction & f) = default;
+    FacConstruction(FacConstruction && f) = default;
+    FacConstruction& operator=(const FacConstruction & f) = default;
+    FacConstruction& operator=(FacConstruction && f) = default;
+    vec<ShipClass> & GetShipClasses();
+    vec<UnitClass> & GetUnitClasses();
+    bool HasShipClass(int sc) const;
+    bool HasUnitClass(int uc) const;
+    vec<double> & GetResesPerTick();
+    double GetResPerTick(ResType rt);
 };
 
-class FacAbility {
+class FacProduction {
 private:
-    ID id;
-    FacAbilityType type;
-    vec<double> data;
-    double health;
+    umap<ResType,double> rates;
 public:
-    FacAbility();
-    FacAbility(ID _id, FacAbilityType _type, vec<double> _data, double _health);
-    FacAbility(const FacAbility & f) = default;
-    FacAbility(FacAbility && f) = default;
-    FacAbility& operator=(const FacAbility & f) = default;
-    FacAbility& operator=(FacAbility && f) = default;
-    ID GetID() const;
-    FacAbilityType GetFacAbilityType() const;
-    strv GetFacAbilityTypeAsString();
-    vec<double> & GetData();
-    double GetHealth() const;
-    void SetHealth(double _health);
+    FacProduction();
+    FacProduction(
+        umap<ResType,double> _rates
+    );
+    FacProduction(const FacProduction & f) = default;
+    FacProduction(FacProduction && f) = default;
+    FacProduction& operator=(const FacProduction & f) = default;
+    FacProduction& operator=(FacProduction && f) = default;
+    umap<ResType,double> & GetRates();
+    double GetRate(ResType rt);
+};
+
+
+class FacGovernment {
+private:
+    double tax_rate;
+public:
+    FacGovernment();
+    FacGovernment(
+        double _tax_rate
+    );
+    FacGovernment(const FacGovernment & f) = default;
+    FacGovernment(FacGovernment && f) = default;
+    FacGovernment& operator=(const FacGovernment & f) = default;
+    FacGovernment& operator=(FacGovernment && f) = default;
+    double GetTaxRate() const;
 };
 
 class Facility {
@@ -37,17 +65,19 @@ private:
     ID id;
     str name;
     str desc;
-    vec<FacAbility> abilities;
+    vec<ID> prereqs;
+    vec<ID> postreqs;
+    uptr<FacConstruction> construction;
+    uptr<FacProduction> production;
+    uptr<FacGovernment> government;
 public:
     Facility();
-    Facility(ID _id, str _name, vec<FacAbility> _abilities);
-    Facility(const Facility & f) = default;
+    Facility(ID _id, str _name, vec<ID> _prereqs, vec<ID> _postreqs);
     Facility(Facility && f) = default;
-    Facility& operator=(const Facility & f) = default;
     Facility& operator=(Facility && f) = default;
     ID GetID() const;
     str GetName() const;
     str GetDesc();
-    vec<FacAbility> & GetAbilities();
-    bool HasAbilityType(FacAbilityType fat);
+    vec<ID> & GetPrereqs();
+    vec<ID> & GetPostreqs();
 };

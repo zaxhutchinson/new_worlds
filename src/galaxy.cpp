@@ -5,7 +5,7 @@ Galaxy::Galaxy() {}
 
 
 void Galaxy::AddSystem(System sys) {
-    systems.emplace(sys.GetID(), sys);
+    systems.emplace(sys.GetID(), std::move(sys));
 }
 System * Galaxy::GetSystem(ID id) {
     try {

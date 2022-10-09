@@ -49,20 +49,9 @@ void System::InitLoyalty(vec<ID> & all_faction_ids) {
 vec<Facility> & System::GetFacilities() {
     return facilities;
 }
-vec<Facility*> System::GetFacilitiesWithAbility(FacAbilityType fat) {
-    vec<Facility*> facs;
-    for(
-        vec<Facility>::iterator it = facilities.begin();
-        it != facilities.end(); it++
-    ) {
-        if(it->HasAbilityType(fat)) {
-            facs.push_back(&(*it));
-        }
-    }
-    return facs;
-}
+
 void System::AddFacility(Facility facility) {
-    facilities.push_back(facility);
+    facilities.push_back(std::move(facility));
 }
 
 double System::GetActualResource(ResType t) const {

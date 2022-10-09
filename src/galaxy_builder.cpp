@@ -1,6 +1,20 @@
 #include"galaxy_builder.hpp"
 
 uptr<Galaxy> BuildNewGalaxy(str modname) {
+    if(prefs::prefs_loaded) {
+        if(prefs::random_galaxy) {
+            return BuildRandomGalaxy(modname);
+        } else {
+            return BuildNewGalaxy(modname);
+        }
+    } else {
+        return nullptr;
+    }
+}
+
+
+
+uptr<Galaxy> BuildDefinedGalaxy(str modname) {
     uptr<Galaxy> galaxy = std::make_unique<Galaxy>();
 
     std::ifstream ifs("mods/"+modname+"/galaxy.json");
@@ -33,6 +47,20 @@ uptr<Galaxy> BuildNewGalaxy(str modname) {
         galaxy->AddSystem(std::move(s));
 
     }
+
+    return galaxy;
+}
+
+
+
+uptr<Galaxy> BuildRandomGalaxy(str modname) {
+    uptr<Galaxy> galaxy = std::make_unique<Galaxy>();
+
+    // Generate Systems
+
+    // Select starting faction systems
+
+    // Add starting facilities to faction systems
 
     return galaxy;
 }

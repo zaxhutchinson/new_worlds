@@ -2,6 +2,7 @@
     "engine_1": {
         "name": "Engine v1",
         "desc": "An entry level engine. Not bad. Not great.",
+        "costs":[0,0,0,0,0],
         "crew_size": 10,
         "max_health": 100.0,
         "mass": 50.0,
@@ -11,6 +12,7 @@
     "engine_2": {
         "name": "Engine v2",
         "desc": "An improved version of the entry level engine. A little better.",
+        "costs":[0,0,0,0,0],
         "crew_size": 10,
         "max_health": 100.0,
         "mass": 50.0,

@@ -67,3 +67,7 @@ using sizet = std::size_t;
 
 using ID = str;
 using UUID = sole::uuid;
+
+
+using UnitClass = u8;
+using ShipClass = u8;

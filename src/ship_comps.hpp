@@ -1,6 +1,7 @@
 #pragma once
 
 #include"zxlb.hpp"
+#include"enums.hpp"
 
 class Crew {
 private:
@@ -204,6 +205,7 @@ protected:
     CompType type;
     str name;
     str desc;
+    vec<double> costs;
     Crew crew;
     double cur_health;
     double max_health;
@@ -222,6 +224,7 @@ public:
         CompType _type,
         str _name,
         str _desc,
+        vec<double> _costs,
         Crew _crew,
         double _cur_health,
         double _max_health,
@@ -234,6 +237,8 @@ public:
     CompType GetCompType() const;
     str GetName() const;
     str GetDesc() const;
+    vec<double> & GetCosts();
+    double GetCost(ResType rt) const;
     Crew * GetCrew();
     double GetCurHealth() const;
     double GetMaxHealth() const;

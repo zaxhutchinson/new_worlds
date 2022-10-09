@@ -162,29 +162,42 @@ void Reactor::SetFuelReq(double amt) {
 /* COMP
 */
 Comp::Comp() 
-    : id(ID()), type(CompType::END), name("NONE"), desc("NONE"), crew(Crew()), cur_health(0),
+    : id(ID()), type(CompType::END), name("NONE"), desc("NONE"),
+        crew(Crew()), cur_health(0),
         max_health(0), mass(0), energy_req(0), layer(0),
-        engine(nullptr), weapon(nullptr), shields(nullptr), reactor(nullptr), mogdrive(nullptr)
-{}
+        engine(nullptr), weapon(nullptr), shields(nullptr), 
+        reactor(nullptr), mogdrive(nullptr)
+{
+    for(int i = 0; i < static_cast<int>(ResType::END); i++) {
+        costs.push_back(0.0);
+    }
+}
 Comp::Comp(
     ID _id,
     CompType _type,
     str _name,
     str _desc,
+    vec<double> _costs,
     Crew _crew,
     double _cur_health,
     double _max_health,
     double _mass,
     double _energy_req
 )
-    : id(_id), type(_type), name(_name), desc(_desc), crew(_crew), cur_health(_cur_health),
+    : id(_id), type(_type), name(_name), desc(_desc), costs(_costs),
+        crew(_crew), cur_health(_cur_health),
         max_health(_max_health), mass(_mass), energy_req(_energy_req), layer(0),
-        engine(nullptr), weapon(nullptr), shields(nullptr), reactor(nullptr), mogdrive(nullptr)
+        engine(nullptr), weapon(nullptr), shields(nullptr), 
+        reactor(nullptr), mogdrive(nullptr)
 {}
 ID Comp::GetID() const { return id; }
 CompType Comp::GetCompType() const { return type; }
 str Comp::GetName() const { return name; }
 str Comp::GetDesc() const { return desc; }
+vec<double> & Comp::GetCosts() { return costs; }
+double Comp::GetCost(ResType rt) const {
+    return costs[static_cast<int>(rt)];
+}
 Crew * Comp::GetCrew() { return &crew; }
 double Comp::GetCurHealth() const { return cur_health; }
 double Comp::GetMaxHealth() const { return max_health; }

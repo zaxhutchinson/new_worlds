@@ -2,6 +2,7 @@
     "railgun_1": {
         "name": "Rail Gun, Version 1",
         "desc": "A rail gun.",
+        "costs":[0,0,0,0,0],
         "crew_size": 10,
         "max_health": 100.0,
         "mass": 20.0,

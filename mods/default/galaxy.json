@@ -1,18 +1,8 @@
 {
-    "samorim" : {
-        "name" : "Samorim",
-        "desc" : "Samorim is a planet of plenty. It has an old, but not very large population.",
-        "position": [1,1],
-        "resources": [35,5,0],
-        "infrastructure":[0.8,0.9,0.0],
-        "stability":100
-    },
-    "cadia" : {
-        "name" : "Cadia",
-        "desc" : "Cadia is a dry planet. It is rich in precious minerals.",
-        "position": [8,29],
-        "resources": [10,50,5],
-        "infrastructure":[0.2,0.5,0.2],
-        "stability":80
-    }
+    "galaxy_X" : 1000,
+    "galaxy_Y" : 1000,
+    "number_of_systems" : 200,
+    "system_names":"system_names",
+    
+    "number_of_factions":10
 }
