@@ -49,4 +49,5 @@ public:
     str GetName() const;
     str GetDesc();
     vec<FacAbility> & GetAbilities();
+    bool HasAbilityType(FacAbilityType fat);
 };

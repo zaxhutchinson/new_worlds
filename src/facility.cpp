@@ -49,3 +49,12 @@ str Facility::GetDesc() {
 vec<FacAbility> & Facility::GetAbilities() {
     return abilities;
 }
+bool Facility::HasAbilityType(FacAbilityType fat) {
+    for(
+        vec<FacAbility>::iterator it = abilities.begin();
+        it != abilities.end(); it++
+    ) {
+        if(it->GetFacAbilityType()==fat) return true;
+    }
+    return false;
+}

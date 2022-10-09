@@ -2,6 +2,7 @@
 
 #include"zxlb.hpp"
 #include"vec2i.hpp"
+#include"facility.hpp"
 
 enum class ResType {
     Population,
@@ -25,7 +26,7 @@ private:
     vec<ID> connections;
     double stability;
     umap<ID,double> loyalty;
-    
+    vec<Facility> facilities;
 public:
     System();
     System(
@@ -48,7 +49,11 @@ public:
     double GetBaseResource(ResType t) const;
     double GetInfrastructure(ResType t) const;
     double GetStability() const;
+    vec<Facility> & GetFacilities();
+    vec<Facility*> GetFacilitiesWithAbility(FacAbilityType fat);
     void InitLoyalty(vec<ID> & all_faction_ids);
+    void AddFacility(Facility facility);
+
 
     double GetActualResource(ResType t) const;
 

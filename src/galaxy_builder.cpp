@@ -18,7 +18,6 @@ uptr<Galaxy> BuildNewGalaxy(str modname) {
         Vec2i pos(coords[0],coords[1]);
         vec<double> res = it->at("resources");
         vec<double> inf = it->at("infrastructure");
-        vec<ID> conns = it->at("connections");
         double stability = it->at("stability");
 
         System s(
