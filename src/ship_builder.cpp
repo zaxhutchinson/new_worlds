@@ -7,11 +7,7 @@ ShipBuilder::ShipBuilder() {
 
 void ShipBuilder::LoadTemplates(str modname) {
     LoadShipTemplates(modname);
-    LoadWeaponTemplates(modname);
-    LoadEngineTemplates(modname);
-    LoadReactorTemplates(modname);
-    LoadShieldTemplates(modname);
-    LoadMogDriveTemplates(modname);
+    LoadShipCompTemplates(modname);
 }
 
 
@@ -29,8 +25,8 @@ void ShipBuilder::LoadShipTemplates(str modname) {
         ship_count.emplace(id,0);
     }
 }
-void ShipBuilder::LoadWeaponTemplates(str modname) {
-    std::ifstream ifs("mods/"+modname+"/ship_comp_weapons.json");
+void ShipBuilder::LoadShipCompTemplates(str modname) {
+    std::ifstream ifs("mods/"+modname+"/ship_comps.json");
     nlohmann::json j;
     ifs >> j;
     for(
@@ -39,59 +35,7 @@ void ShipBuilder::LoadWeaponTemplates(str modname) {
     ) {
         str id = it.key();
         nlohmann::json temp = it.value();
-        weapon_templates.emplace(id, temp);
-    }
-}
-void ShipBuilder::LoadEngineTemplates(str modname) {
-    std::ifstream ifs("mods/"+modname+"/ship_comp_engines.json");
-    nlohmann::json j;
-    ifs >> j;
-    for(
-        nlohmann::json::iterator it = j.begin();
-        it != j.end(); it++
-    ) {
-        str id = it.key();
-        nlohmann::json temp = it.value();
-        engine_templates.emplace(id, temp);
-    }
-}
-void ShipBuilder::LoadReactorTemplates(str modname) {
-    std::ifstream ifs("mods/"+modname+"/ship_comp_reactors.json");
-    nlohmann::json j;
-    ifs >> j;
-    for(
-        nlohmann::json::iterator it = j.begin();
-        it != j.end(); it++
-    ) {
-        str id = it.key();
-        nlohmann::json temp = it.value();
-        reactor_templates.emplace(id, temp);
-    }
-}
-void ShipBuilder::LoadShieldTemplates(str modname) {
-    std::ifstream ifs("mods/"+modname+"/ship_comp_shields.json");
-    nlohmann::json j;
-    ifs >> j;
-    for(
-        nlohmann::json::iterator it = j.begin();
-        it != j.end(); it++
-    ) {
-        str id = it.key();
-        nlohmann::json temp = it.value();
-        shield_templates.emplace(id, temp);
-    }
-}
-void ShipBuilder::LoadMogDriveTemplates(str modname) {
-    std::ifstream ifs("mods/"+modname+"/ship_comp_mogdrives.json");
-    nlohmann::json j;
-    ifs >> j;
-    for(
-        nlohmann::json::iterator it = j.begin();
-        it != j.end(); it++
-    ) {
-        str id = it.key();
-        nlohmann::json temp = it.value();
-        mogdrive_templates.emplace(id, temp);
+        shipcomp_templates.emplace(id, temp);
     }
 }
 
@@ -116,12 +60,7 @@ uptr<Ship> ShipBuilder::BuildShip(ShipSpec ss) {
     uptr<Ship> ship = std::make_unique<Ship>(id,name,ship_class);
 
     vec<nlohmann::json> layer_temps = j.at("layers");
-    vec<nlohmann::json> engine_temps = j.at("engines");
-    vec<nlohmann::json> weapon_temps = j.at("weapons");
-    vec<nlohmann::json> shield_temps = j.at("shields");
-    vec<nlohmann::json> reactor_temps = j.at("reactors");
-    vec<nlohmann::json> mogdrive_temps = j.at("mogdrives");
-
+    vec<nlohmann::json> comp_temps = j.at("comps");
     // Build Layers
     for(
         vec<nlohmann::json>::iterator it = layer_temps.begin();
@@ -133,83 +72,19 @@ uptr<Ship> ShipBuilder::BuildShip(ShipSpec ss) {
         ship->AddShipLayer(ShipLayer(layer_num, layer_mass, layer_health));
     }
 
-    // Add Engines
+    // Add Comps
     for(
-        vec<nlohmann::json>::iterator it = engine_temps.begin();
-        it != engine_temps.end(); it++
+        vec<nlohmann::json>::iterator it = comp_temps.begin();
+        it != comp_temps.end(); it++
     ) {
         int layer_num = it->at("layer");
         ID cid = it->at("id");
         int amt = it->at("amt");
         for(int i = 0; i < amt; i++) {
-            Comp e = BuildEngine(cid);
-            e.GetCrew()->SetXP(xpDist(rng));
-            e.SetLayer(layer_num);
-            ship->AddComp(std::move(e));
-        }
-    }
-
-    // Add Weapons
-    for(
-        vec<nlohmann::json>::iterator it = weapon_temps.begin();
-        it != weapon_temps.end(); it++
-    ) {
-        int layer_num = it->at("layer");
-        ID cid = it->at("id");
-        int amt = it->at("amt");
-        for(int i = 0; i < amt; i++) {
-            Comp w = BuildWeapon(cid);
-            w.GetCrew()->SetXP(xpDist(rng));
-            w.SetLayer(layer_num);
-            ship->AddComp(std::move(w));
-        }
-    }
-
-    // Add Reactor
-    for(
-        vec<nlohmann::json>::iterator it = reactor_temps.begin();
-        it != reactor_temps.end(); it++
-    ) {
-        int layer_num = it->at("layer");
-        ID cid = it->at("id");
-        int amt = it->at("amt");
-        for(int i = 0; i < amt; i++) {
-            Comp r = BuildReactor(cid);
-            r.GetCrew()->SetXP(xpDist(rng));
-            r.SetLayer(layer_num);
-            ship->AddComp(std::move(r));
-        }
-    }
-
-    // Add Shields
-    for(
-        vec<nlohmann::json>::iterator it = shield_temps.begin();
-        it != shield_temps.end(); it++
-    ) {
-        int layer_num = it->at("layer");
-        ID cid = it->at("id");
-        int amt = it->at("amt");
-        for(int i = 0; i < amt; i++) {
-            Comp s = BuildShield(cid);
-            s.GetCrew()->SetXP(xpDist(rng));
-            s.SetLayer(layer_num);
-            ship->AddComp(std::move(s));
-        }
-    }
-
-    // Add MogDrives
-    for(
-        vec<nlohmann::json>::iterator it = mogdrive_temps.begin();
-        it != mogdrive_temps.end(); it++
-    ) {
-        int layer_num = it->at("layer");
-        ID cid = it->at("id");
-        int amt = it->at("amt");
-        for(int i = 0; i < amt; i++) {
-            Comp m = BuildMogDrive(cid);
-            m.GetCrew()->SetXP(xpDist(rng));
-            m.SetLayer(layer_num);
-            ship->AddComp(std::move(m));
+            Comp c = BuildComp(cid);
+            c.GetCrew()->SetXP(xpDist(rng));
+            c.SetLayer(layer_num);
+            ship->AddComp(std::move(c));
         }
     }
 
@@ -217,7 +92,9 @@ uptr<Ship> ShipBuilder::BuildShip(ShipSpec ss) {
     return ship;
 }
 
-Comp ShipBuilder::BuildComp(ID id, CompType ct, nlohmann::json j) {
+Comp ShipBuilder::BuildComp(ID id) {
+
+    nlohmann::json j = shipcomp_templates.at(id);
 
     str name = j.at("name");
     str desc = j.at("desc");
@@ -229,23 +106,43 @@ Comp ShipBuilder::BuildComp(ID id, CompType ct, nlohmann::json j) {
 
     Crew crew(crew_size);
 
-    Comp comp(id, ct, name, desc, costs, crew, max_health, max_health,
+    Comp comp(id, name, desc, costs, crew, max_health, max_health,
         mass, energy_req);
 
+    if(j.contains("engine")) {
+        uptr<Engine> engine = BuildEngine(j.at("engine"));
+        comp.SetEngine(std::move(engine));
+    }
+
+    if(j.contains("weapon")) {
+        uptr<Weapon> weapon = BuildWeapon(j.at("weapon"));
+        comp.SetWeapon(std::move(weapon));
+    }
+
+    if(j.contains("shields")) {
+        uptr<Shields> shields = BuildShields(j.at("shields"));
+        comp.SetShields(std::move(shields));
+    }
+
+    if(j.contains("reactor")) {
+        uptr<Reactor> reactor = BuildReactor(j.at("reactor"));
+        comp.SetReactor(std::move(reactor));
+    }   
+
+    if(j.contains("mogdrive")) {
+        uptr<MogDrive> mogdrive = BuildMogDrive(j.at("mogdrive"));
+        comp.SetMogDrive(std::move(mogdrive));
+    }
+
     return comp;
 }
 
-Comp ShipBuilder::BuildEngine(ID id) {
-    nlohmann::json j = engine_templates.at(id);
-    Comp comp = BuildComp(id, CompType::Engine, j);
+uptr<Engine> ShipBuilder::BuildEngine(nlohmann::json j) {
     double thrust = j.at("thrust");
     uptr<Engine> engine = std::make_unique<Engine>(thrust);
-    comp.SetEngine(std::move(engine));
-    return comp;
+    return engine;
 }
-Comp ShipBuilder::BuildWeapon(ID id) {
-    nlohmann::json j = weapon_templates.at(id);
-    Comp comp = BuildComp(id, CompType::Weapon, j);
+uptr<Weapon> ShipBuilder::BuildWeapon(nlohmann::json j) {
     double damage = j.at("damage");
     double target_speed = j.at("target_speed");
     double rate_of_fire = j.at("rate_of_fire");
@@ -254,39 +151,29 @@ Comp ShipBuilder::BuildWeapon(ID id) {
     uptr<Weapon> weapon = std::make_unique<Weapon>(
         damage, target_speed, rate_of_fire, range, projectile_speed
     );
-    comp.SetWeapon(std::move(weapon));
-    return comp;
+    return weapon;
 }
-Comp ShipBuilder::BuildReactor(ID id) {
-    nlohmann::json j = reactor_templates.at(id);
-    Comp comp = BuildComp(id, CompType::Reactor, j);
+uptr<Reactor> ShipBuilder::BuildReactor(nlohmann::json j) {
     double energy_output = j.at("energy_output");
     double fuel_req = j.at("fuel_req");
     uptr<Reactor> reactor = std::make_unique<Reactor>(
         energy_output, fuel_req
     );
-    comp.SetReactor(std::move(reactor));
-    return comp;
+    return reactor;
 }
-Comp ShipBuilder::BuildShield(ID id) {
-    nlohmann::json j = shield_templates.at(id);
-    Comp comp = BuildComp(id, CompType::Shields, j);
+uptr<Shields> ShipBuilder::BuildShields(nlohmann::json j) {
     double damage_reduction = j.at("damage_reduction");
     uptr<Shields> shields = std::make_unique<Shields>(
         damage_reduction
     );
-    comp.SetShields(std::move(shields));
-    return comp;
+    return shields;
 }
-Comp ShipBuilder::BuildMogDrive(ID id) {
-    nlohmann::json j = mogdrive_templates.at(id);
-    Comp comp = BuildComp(id, CompType::MogDrive, j);
+uptr<MogDrive> ShipBuilder::BuildMogDrive(nlohmann::json j) {
     double carry_mass = j.at("carry_mass");
     double carry_range = j.at("carry_range");
     double charge_time = j.at("charge_time");
     uptr<MogDrive> mogdrive = std::make_unique<MogDrive>(
         carry_mass, carry_range, charge_time
     );
-    comp.SetMogDrive(std::move(mogdrive));
-    return comp;
+    return mogdrive;
 }

@@ -1,0 +1,81 @@
+{
+    "0000": {
+        "name": "Engine v1",
+        "desc": "An entry level engine. Not bad. Not great.",
+        "costs":[0,0,0,0,0],
+        "crew_size": 10,
+        "max_health": 100.0,
+        "mass": 50.0,
+        "energy_req":50,
+        "engine": {
+            "thrust": 100.0
+        }
+    },
+    "0001": {
+        "name": "Engine v2",
+        "desc": "An entry level engine. Not bad. Not great.",
+        "costs":[0,0,0,0,0],
+        "crew_size": 10,
+        "max_health": 100.0,
+        "mass": 50.0,
+        "energy_req":50,
+        "engine": {
+            "thrust": 120.0
+        }
+    },
+    "0100" : {
+        "name": "MOG Drive v1",
+        "desc": "An entry level drive. Not bad. Not great.",
+        "costs":[0,0,0,0,0],
+        "crew_size": 10,
+        "max_health": 100.0,
+        "mass": 1.0,
+        "energy_req":100,
+        "mogdrive": {
+            "carry_mass": 10000,
+            "carry_range": 20,
+            "charge_time": 5
+        }
+    },
+    "0200" : {
+        "name": "Reactor v1",
+        "desc": "An entry level reactor. Not bad. Not great.",
+        "costs":[0,0,0,0,0],
+        "crew_size": 10,
+        "max_health": 100.0,
+        "mass": 100.0,
+        "energy_req":0,
+        "reactor": {
+            "energy_output":1000,
+            "fuel_req":100
+        }
+    },
+    "0300" : {
+        "name": "Basic Budget Shields",
+        "desc": "This is your basic budget, lowcost shield package.",
+        "costs":[0,0,0,0,0],
+        "crew_size": 4,
+        "max_health": 100.0,
+        "mass": 50.0,
+        "energy_req":100.0,
+        "shields":{
+            "damage_reduction": 10.0
+        }
+    },
+    "0400": {
+        "name": "Rail Gun, Version 1",
+        "desc": "A rail gun.",
+        "costs":[0,0,0,0,0],
+        "crew_size": 10,
+        "max_health": 100.0,
+        "mass": 20.0,
+        "energy_req":10,
+        "weapon": {
+            "damage": 25.0,
+            "target_speed": 10.0,
+            "rate_of_fire": 1.0,
+            "range": 1000.0,
+            "projectile_speed": 100.0
+        }
+    }
+}

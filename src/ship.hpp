@@ -10,7 +10,7 @@ private:
     str name;
     int ship_class;
     umap<int,ShipLayer> layers;
-    umap<CompType,vec<Comp>> comps;
+    vec<Comp> comps;
 public:
     Ship();
     Ship(ID _id, str _name, int _ship_class);
@@ -25,7 +25,7 @@ public:
     int GetShipClass() const;
     ShipLayer * GetShipLayer(int i);
     umap<int,ShipLayer>& GetShipLayers();
-    vec<Comp> * GetCompsOfType(CompType ct);
+    vec<Comp*> GetCompsWithType(CompType ct);
     void AddShipLayer(ShipLayer l);
     void AddComp(Comp c);
     

@@ -202,7 +202,6 @@ public:
 class Comp {
 protected:
     ID id;
-    CompType type;
     str name;
     str desc;
     vec<double> costs;
@@ -221,7 +220,6 @@ public:
     Comp();
     Comp(
         ID _id,
-        CompType _type,
         str _name,
         str _desc,
         vec<double> _costs,
@@ -234,7 +232,6 @@ public:
     Comp(Comp && c) = default;
     Comp& operator=(Comp && c) = default;
     ID GetID() const;
-    CompType GetCompType() const;
     str GetName() const;
     str GetDesc() const;
     vec<double> & GetCosts();

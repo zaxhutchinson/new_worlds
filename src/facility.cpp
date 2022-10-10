@@ -96,3 +96,21 @@ vec<ID> & Facility::GetPrereqs() {
 vec<ID> & Facility::GetPostreqs() {
     return postreqs;
 }
+FacConstruction * Facility::GetFacConstruction() { 
+    return construction.get();
+}
+FacProduction * Facility::GetFacProduction() {
+    return production.get();
+}
+FacGovernment * Facility::GetFacGovernment() {
+    return government.get();
+}
+void Facility::AddFacConstruction(uptr<FacConstruction> f) {
+    construction = std::move(f);
+}
+void Facility::AddFacProduction(uptr<FacProduction> f) {
+    production = std::move(f);
+}
+void Facility::AddFacGovernment(uptr<FacGovernment> f) {
+    government = std::move(f);
+}

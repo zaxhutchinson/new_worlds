@@ -1,6 +1,7 @@
 /.vscode
 /obj
 /old
+/docs
 
 .DS_store
 new_worlds

@@ -80,4 +80,10 @@ public:
     str GetDesc();
     vec<ID> & GetPrereqs();
     vec<ID> & GetPostreqs();
+    FacConstruction * GetFacConstruction();
+    FacProduction * GetFacProduction();
+    FacGovernment * GetFacGovernment();
+    void AddFacConstruction(uptr<FacConstruction> f);
+    void AddFacProduction(uptr<FacProduction> f);
+    void AddFacGovernment(uptr<FacGovernment> f);
 };

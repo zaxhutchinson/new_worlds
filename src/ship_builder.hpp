@@ -20,11 +20,7 @@ private:
 
     RNG rng;
 
-    umap<ID,nlohmann::json> engine_templates;
-    umap<ID,nlohmann::json> weapon_templates;
-    umap<ID,nlohmann::json> reactor_templates;
-    umap<ID,nlohmann::json> shield_templates;
-    umap<ID,nlohmann::json> mogdrive_templates;
+    umap<ID,nlohmann::json> shipcomp_templates;
     umap<ID,nlohmann::json> ship_templates;
 
     umap<ID,i64> ship_count;
@@ -34,21 +30,17 @@ public:
 
     void LoadTemplates(str modname);
     void LoadShipTemplates(str modname);
-    void LoadWeaponTemplates(str modname);
-    void LoadEngineTemplates(str modname);
-    void LoadReactorTemplates(str modname);
-    void LoadShieldTemplates(str modname);
-    void LoadMogDriveTemplates(str modname);
+    void LoadShipCompTemplates(str modname);
 
     i64 GetNextShipCount(ID id);
 
     uptr<Ship> BuildShip(ShipSpec ss);
 
-    Comp BuildComp(ID id, CompType ct, nlohmann::json j);
+    Comp BuildComp(ID id);
 
-    Comp BuildEngine(ID id);
-    Comp BuildWeapon(ID id);
-    Comp BuildReactor(ID id);
-    Comp BuildShield(ID id);
-    Comp BuildMogDrive(ID id);
+    uptr<Engine> BuildEngine(nlohmann::json j);
+    uptr<Weapon> BuildWeapon(nlohmann::json j);
+    uptr<Reactor> BuildReactor(nlohmann::json j);
+    uptr<Shields> BuildShields(nlohmann::json j);
+    uptr<MogDrive> BuildMogDrive(nlohmann::json j);
 };

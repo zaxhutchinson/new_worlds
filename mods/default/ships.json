@@ -9,84 +9,30 @@
                 "mass":1000
             }
         ],
-        "engines": [
+        "comps": [
             {
                 "layer":0,
-                "id":"engine_1",
+                "id":"0001",
                 "amt":4
-            }
-        ],
-        "weapons": [
+            },
             {
                 "layer":0,
-                "id":"railgun_1",
+                "id":"0100",
                 "amt":1
-            }
-        ],
-        "shields": [
+            },
             {
                 "layer":0,
-                "id":"basic_shields",
+                "id":"0200",
                 "amt":1
-            }
-        ],
-        "reactors": [
+            },
             {
                 "layer":0,
-                "id":"reactor_1",
+                "id":"0300",
                 "amt":1
-            }
-        ],
-        "mogdrives": [
+            },
             {
                 "layer":0,
-                "id":"drive_1",
-                "amt":1
-            }
-        ]
-    },
-    "ship_2" : {
-        "name": "Ship Two",
-        "class": 1,
-        "layers" : [
-            {
-                "layer":0,
-                "health":1000,
-                "mass":1000
-            }
-        ],
-        "engines": [
-            {
-                "layer":0,
-                "id":"engine_1",
-                "amt":4
-            }
-        ],
-        "weapons": [
-            {
-                "layer":0,
-                "id":"railgun_1",
-                "amt":10
-            }
-        ],
-        "shields": [
-            {
-                "layer":0,
-                "id":"basic_shields",
-                "amt":1
-            }
-        ],
-        "reactors": [
-            {
-                "layer":0,
-                "id":"reactor_1",
-                "amt":1
-            }
-        ],
-        "mogdrives": [
-            {
-                "layer":0,
-                "id":"drive_1",
+                "id":"0400",
                 "amt":1
             }
         ]
